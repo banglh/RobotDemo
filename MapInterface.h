@@ -3,3 +3,4 @@
 #include "MapConstants.h"
 
 void mapInit(unsigned int map[N_ROW][N_COL]);
+void printMap(unsigned int map[N_ROW][N_COL]);
