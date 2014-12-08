@@ -27,3 +27,6 @@
 *.depend
 *.cbp
 *.layout
+
+# Ctags
+tags
