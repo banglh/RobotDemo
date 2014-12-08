@@ -1,5 +1,6 @@
 #include "MapInterface.h"
 
+/******************************** Map related functions **************************************/
 void mapInit(unsigned int map[N_ROW][N_COL]) {
     int i,j;
 
@@ -36,4 +37,33 @@ void printMap(unsigned int map[N_ROW][N_COL]) {
         }
         printf("\n");
     }
+}
+
+/******************************** Position related functions **************************************/
+unsigned int getRow(unsigned int pos[MAP_DIMS]) {
+    return pos[ROW_CODE];
+}
+
+unsigned int getCol(unsigned int pos[MAP_DIMS]) {
+    return pos[COL_CODE];
+}
+
+int setRow(unsigned int pos[MAP_DIMS], unsigned int newRow) {
+    // check if the new row is valid or not
+    if (newRow < 0 || newRow >= N_ROW)
+        return FALSE;
+    else
+        pos[ROW_CODE] = newRow;
+
+    return TRUE;
+}
+
+int setCol(unsigned int pos[MAP_DIMS], unsigned int newCol) {
+    // check if the new column is valid or not
+    if (newCol < 0 || newCol >= N_COL)
+        return FALSE;
+    else
+        pos[COL_CODE] = newCol;
+
+    return TRUE;
 }
