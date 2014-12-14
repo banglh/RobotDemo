@@ -1,4 +1,5 @@
 #include "MapInterface.h"
+#include <math.h>
 
 /******************************** Map related functions **************************************/
 void mapInit(unsigned int map[N_ROW][N_COL]) {
@@ -39,7 +40,52 @@ void printMap(unsigned int map[N_ROW][N_COL]) {
     }
 }
 
+int isNeighbour(unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2) {
+    if (isValidPos(row1, col1) && isValidPos(row2, col2)) {
+        if (row1 == row2 && abs(col2 - col1) == 1)
+            return TRUE;
+        if (col1 == col2 && abs(row1 - row2) == 1)
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
+int setWall(unsigned int map[N_ROW][N_COL], unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2) {
+    if (isNeighbour(row1, col1, row2, col2)) {
+        if (row1 == row2) {
+            if (col1 > col2) {
+                // wall position: pos2's EAST and pos1's WEST
+                map[row1][col1] += WEST_WALL;
+                map[row2][col2] += EAST_WALL;
+            } else {
+                // wall position: pos1's EAST and pos2's WEST
+                map[row1][col1] += EAST_WALL;
+                map[row2][col2] += WEST_WALL;
+            }
+        } else if (col1 == col2) {
+            if (row1 > row2) {
+                // wall position: pos2's SOUTH and pos1's NORTH
+                map[row1][col1] += NORTH_WALL;
+                map[row2][col2] += SOUTH_WALL;
+            } else {
+                // wall position: pos2's NORTH and pos1's SOUTH
+                map[row1][col1] += SOUTH_WALL;
+                map[row2][col2] += NORTH_WALL;
+            }
+        }
+        return TRUE;
+    }
+    return FALSE;
+}
+
 /******************************** Position related functions **************************************/
+int isValidPos(unsigned int row, unsigned int col) {
+    if (row < 0 || row >= N_ROW || col < 0 || col >= N_COL)
+        return FALSE;
+    return TRUE;
+}
+
 unsigned int getRow(unsigned int pos[MAP_DIMS]) {
     return pos[ROW_CODE];
 }

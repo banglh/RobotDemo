@@ -21,27 +21,31 @@ int main()
     mapInit(map);
     printMap(map);
 
-    int row, col;
+    int row1, col1, row2, col2;
     char c = 'y';
     robotDir = 4;
     unsigned int dir = EAST;
     setRobotDirection(&robotDir, dir);
     printRobotDirection(robotDir);
-//    while(c == 'y' || c=='Y') {
-//        printf("set robot position\n");
-//        printf("Row = ");
-//        scanf("%d", &row);
-//        printf("Col = ");
-//        scanf("%d", &col);
-//        if (setPos(robotPos, row, col)) {
-//            printf("new robot position: [%d,%d]\n", getRow(robotPos), getCol(robotPos));
-//        } else {
-//            printf("row or col is invalid\n");
-//            printf("current robot position: [%d,%d]\n", getRow(robotPos), getCol(robotPos));
-//        }
-//        printf("continue? (y/n) ");
-//        getchar();
-//        c =getchar();
-//    }
+    while(c == 'y' || c=='Y') {
+        printf("set wall");
+        printf("Row1 = ");
+        scanf("%d", &row1);
+        printf("Col1 = ");
+        scanf("%d", &col1);
+        printf("Row2 = ");
+        scanf("%d", &row2);
+        printf("Col2 = ");
+        scanf("%d", &col2);
+        if (setWall(map, row1, col1, row2, col2)) {
+            printMap(map);
+        } else {
+            printf("row or col is invalid\n");
+            printMap(map);
+        }
+        printf("continue? (y/n) ");
+        getchar();
+        c =getchar();
+    }
     return 0;
 }
