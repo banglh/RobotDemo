@@ -51,6 +51,16 @@ int isNeighbour(unsigned int row1, unsigned int col1, unsigned int row2, unsigne
     return FALSE;
 }
 
+int isNeighbour2(unsigned int pos1[MAP_DIMS], unsigned int pos2[MAP_DIMS]) {
+    if (isValidPos2(pos1) && isValidPos2(pos2)) {
+        if (pos1[ROW_CODE] == pos2[ROW_CODE] && abs(pos2[COL_CODE] - pos1[COL_CODE]) == 1)
+            return TRUE;
+        if (pos1[COL_CODE] == pos2[COL_CODE] && abs(pos1[ROW_CODE] - pos2[ROW_CODE]) == 1)
+            return TRUE;
+    }
+    return FALSE;
+}
+
 int setWall(unsigned int map[N_ROW][N_COL], unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2) {
     if (isNeighbour(row1, col1, row2, col2)) {
         if (row1 == row2) {
@@ -79,9 +89,101 @@ int setWall(unsigned int map[N_ROW][N_COL], unsigned int row1, unsigned int col1
     return FALSE;
 }
 
+int setWall2(unsigned int map[N_ROW][N_COL], unsigned int pos1[MAP_DIMS], unsigned int pos2[MAP_DIMS]) {
+    if (isNeighbour2(pos1, pos2)) {
+        if (pos1[ROW_CODE] == pos2[ROW_CODE]) {
+            if (pos1[COL_CODE] > pos2[COL_CODE]) {
+                // wall position: pos2's EAST and pos1's WEST
+                map[pos1[ROW_CODE]][pos1[COL_CODE]] += WEST_WALL;
+                map[pos2[ROW_CODE]][pos2[COL_CODE]] += EAST_WALL;
+            } else {
+                // wall position: pos1's EAST and pos2's WEST
+                map[pos1[ROW_CODE]][pos1[COL_CODE]] += EAST_WALL;
+                map[pos2[ROW_CODE]][pos2[COL_CODE]] += WEST_WALL;
+            }
+        } else if (pos1[COL_CODE] == pos2[COL_CODE]) {
+            if (pos1[ROW_CODE] > pos2[ROW_CODE]) {
+                // wall position: pos2's SOUTH and pos1's NORTH
+                map[pos1[ROW_CODE]][pos1[COL_CODE]] += NORTH_WALL;
+                map[pos2[ROW_CODE]][pos2[COL_CODE]] += SOUTH_WALL;
+            } else {
+                // wall position: pos2's NORTH and pos1's SOUTH
+                map[pos1[ROW_CODE]][pos1[COL_CODE]] += SOUTH_WALL;
+                map[pos2[ROW_CODE]][pos2[COL_CODE]] += NORTH_WALL;
+            }
+        }
+        return TRUE;
+    }
+    return FALSE;
+}
+
+int checkWall(unsigned int map[N_ROW][N_COL], unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2) {
+    if (isNeighbour(row1, col1, row2, col2)) {
+        if (row1 == row2) {
+            if (col1 > col2) {
+                // TODO check WEST bit of pos1 or EAST bit of pos2
+                if (getWestBit(map[row1][col1]))
+                    return TRUE;
+            } else {
+                // TODO check EAST bit of pos1 or WEST bit of pos2
+                if (getEastBit(map[row1][col1]))
+                    return TRUE;
+            }
+        } else if (col1 == col2) {
+            if (row1 > row2) {
+                // TODO check NORTH bit of pos1 or SOUTH bit of pos2
+                if (getNorthBit(map[row1][col1]))
+                    return TRUE;
+            } else {
+                // TODO check SOUTH bit of pos1 or NORTH bit of pos2
+                if (getSouthBit(map[row1][col1]))
+                    return TRUE;
+            }
+        }
+        return FALSE;
+    } else {
+        return FALSE;
+    }
+}
+
+unsigned int getNorthBit(unsigned int val) {
+    // implement getNorthBit
+    unsigned int tmp = val;
+    tmp >>= NORTH;  // shift right to NORTH bit
+    tmp &= 1;   // and with 1
+    return tmp;
+}
+unsigned int getEastBit(unsigned int val) {
+    // implement getEastBit
+    unsigned int tmp = val;
+    tmp >>= EAST;  // shift right to EAST bit
+    tmp &= 1;   // and with 1
+    return tmp;
+}
+unsigned int getWestBit(unsigned int val) {
+    // implement getWestBit
+    unsigned int tmp = val;
+    tmp >>= WEST;  // shift right to WEST bit
+    tmp &= 1;   // and with 1
+    return tmp;
+}
+unsigned int getSouthBit(unsigned int val) {
+    // implement getSouthBit
+    unsigned int tmp = val;
+    tmp >>= SOUTH;  // shift right to SOUTH bit
+    tmp &= 1;   // and with 1
+    return tmp;
+}
+
 /******************************** Position related functions **************************************/
 int isValidPos(unsigned int row, unsigned int col) {
     if (row < 0 || row >= N_ROW || col < 0 || col >= N_COL)
+        return FALSE;
+    return TRUE;
+}
+
+int isValidPos2(unsigned int pos[MAP_DIMS]) {
+    if (pos[ROW_CODE] < 0 || pos[ROW_CODE] >= N_ROW || pos[COL_CODE] < 0 || pos[COL_CODE] >= N_COL)
         return FALSE;
     return TRUE;
 }
