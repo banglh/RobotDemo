@@ -80,3 +80,32 @@ int setPos(unsigned int pos[MAP_DIMS], unsigned int newRow, unsigned int newCol)
     pos[ROW_CODE] = newRow;
     pos[COL_CODE] = newCol;
 }
+
+/******************************** Robot direction related functions **************************************/
+int setRobotDirection(unsigned int * rbDir, unsigned int newDir) {
+    if (newDir == NORTH || newDir == SOUTH || newDir == EAST || newDir == WEST) {
+        *rbDir = newDir;
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
+void printRobotDirection(unsigned int rbDir) {
+    switch (rbDir) {
+    case NORTH:
+        printf("Current robot direction: NORTH\n");
+        break;
+    case SOUTH:
+        printf("Current robot direction: SOUTH\n");
+        break;
+    case EAST:
+        printf("Current robot direction: EAST\n");
+        break;
+    case WEST:
+        printf("Current robot direction: WEST\n");
+        break;
+    default:
+        printf("Current robot direction: N/A\n");
+    }
+}

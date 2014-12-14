@@ -12,6 +12,9 @@ unsigned int humanPos[MAP_DIMS];
 // position of the goal
 unsigned int goalPos[MAP_DIMS];
 
+// robot direction
+unsigned int robotDir;
+
 int main()
 {
     // initialize map
@@ -20,21 +23,25 @@ int main()
 
     int row, col;
     char c = 'y';
-    while(c == 'y' || c=='Y') {
-        printf("set robot position\n");
-        printf("Row = ");
-        scanf("%d", &row);
-        printf("Col = ");
-        scanf("%d", &col);
-        if (setPos(robotPos, row, col)) {
-            printf("new robot position: [%d,%d]\n", getRow(robotPos), getCol(robotPos));
-        } else {
-            printf("row or col is invalid\n");
-            printf("current robot position: [%d,%d]\n", getRow(robotPos), getCol(robotPos));
-        }
-        printf("continue? (y/n) ");
-        getchar();
-        c =getchar();
-    }
+    robotDir = 4;
+    unsigned int dir = EAST;
+    setRobotDirection(&robotDir, dir);
+    printRobotDirection(robotDir);
+//    while(c == 'y' || c=='Y') {
+//        printf("set robot position\n");
+//        printf("Row = ");
+//        scanf("%d", &row);
+//        printf("Col = ");
+//        scanf("%d", &col);
+//        if (setPos(robotPos, row, col)) {
+//            printf("new robot position: [%d,%d]\n", getRow(robotPos), getCol(robotPos));
+//        } else {
+//            printf("row or col is invalid\n");
+//            printf("current robot position: [%d,%d]\n", getRow(robotPos), getCol(robotPos));
+//        }
+//        printf("continue? (y/n) ");
+//        getchar();
+//        c =getchar();
+//    }
     return 0;
 }

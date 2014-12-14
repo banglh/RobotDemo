@@ -13,3 +13,6 @@ int setRow(unsigned int pos[MAP_DIMS], unsigned int newRow);    // set row index
 int setCol(unsigned int pos[MAP_DIMS], unsigned int newCol);    // set column index
 int setPos(unsigned int pos[MAP_DIMS], unsigned int newRow, unsigned int newCol);   // set row and column index
 
+// robot direction related functions
+int setRobotDirection(unsigned int * rbDir, unsigned int newDir);
+void printRobotDirection(unsigned int rbDir);
