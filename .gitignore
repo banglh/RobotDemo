@@ -30,3 +30,6 @@
 
 # Ctags
 tags
+
+# debug
+*.cscope_file_list

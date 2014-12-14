@@ -26,10 +26,11 @@ int main()
         scanf("%d", &row);
         printf("Col = ");
         scanf("%d", &col);
-        if (setRow(robotPos, row) && setCol(robotPos, col)) {
-            printf("robot position: [%d,%d]\n", getRow(robotPos), getCol(robotPos));
+        if (setPos(robotPos, row, col)) {
+            printf("new robot position: [%d,%d]\n", getRow(robotPos), getCol(robotPos));
         } else {
             printf("row or col is invalid\n");
+            printf("current robot position: [%d,%d]\n", getRow(robotPos), getCol(robotPos));
         }
         printf("continue? (y/n) ");
         getchar();
