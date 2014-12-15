@@ -310,3 +310,13 @@ int turn180(unsigned int rbDir) {
         return -1;
     }
 }
+
+int setWallFront(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir){
+    // TODO
+}
+int setWallLeft(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir) {
+    // TODO
+}
+int setWallRight(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir) {
+    // TODO
+}

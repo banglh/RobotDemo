@@ -32,3 +32,6 @@ void printRobotDirection(unsigned int rbDir);
 int turnLeft(unsigned int rbDir);
 int turnRight(unsigned int rbDir);
 int turn180(unsigned int rbDir);
+int setWallFront(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir);
+int setWallLeft(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir);
+int setWallRight(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir);
