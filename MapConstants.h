@@ -17,3 +17,6 @@
 
 #define TRUE 1
 #define FALSE 0
+
+/************** for interface 2 ***************/
+#define N_WALL 4
