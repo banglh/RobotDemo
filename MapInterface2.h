@@ -7,8 +7,8 @@ void mapInit(unsigned int map[N_ROW][N_COL][N_WALL]);       // map initializatio
 void printMap(unsigned int map[N_ROW][N_COL][N_WALL]);      // print the encode of map
 int isNeighbour(unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2);    // check if two positions are neighbours
 int isNeighbour2(unsigned int pos1[MAP_DIMS], unsigned int pos2[MAP_DIMS]);
-int setWall(unsigned int map[N_ROW][N_COL], unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2); // set wall between two positions
-int setWall2(unsigned int map[N_ROW][N_COL], unsigned int pos1[MAP_DIMS], unsigned int pos2[MAP_DIMS]); // set wall between two positions
+int setWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2); // set wall between two positions
+int setWall2(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int pos1[MAP_DIMS], unsigned int pos2[MAP_DIMS]); // set wall between two positions
 // check if wall exists between two neighbours
 int checkWall(unsigned int map[N_ROW][N_COL], unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2);
 // get N, W, S, E wall bit

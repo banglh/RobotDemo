@@ -21,10 +21,10 @@ int main()
     mapInit(map);
     printMap(map);
 
-//    setWall(map, 2,0,1,0);
-//    printf("\n");
-//    printMap(map);
-//    printf("%d\n", checkWall(map, 2,0,1,0));
+    setWall(map, 2,2,2,3);
+    printf("\n");
+    printMap(map);
+    printf("%d\n", checkWall(map, 2,0,1,0));
 //    int row1, col1, row2, col2;
 //    char c = 'y';
 //    robotDir = 4;

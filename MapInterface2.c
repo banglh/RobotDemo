@@ -67,27 +67,27 @@ int isNeighbour2(unsigned int pos1[MAP_DIMS], unsigned int pos2[MAP_DIMS]) {
     return FALSE;
 }
 
-int setWall(unsigned int map[N_ROW][N_COL], unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2) {
+int setWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2) {
     if (isNeighbour(row1, col1, row2, col2)) {
         if (row1 == row2) {
             if (col1 > col2) {
                 // wall position: pos2's EAST and pos1's WEST
-                map[row1][col1] += WEST_WALL;
-                map[row2][col2] += EAST_WALL;
+                map[row1][col1][WEST] = 1;
+                map[row2][col2][EAST] = 1;
             } else {
                 // wall position: pos1's EAST and pos2's WEST
-                map[row1][col1] += EAST_WALL;
-                map[row2][col2] += WEST_WALL;
+                map[row1][col1][EAST] = 1;
+                map[row2][col2][WEST] = 1;
             }
         } else if (col1 == col2) {
             if (row1 > row2) {
                 // wall position: pos2's SOUTH and pos1's NORTH
-                map[row1][col1] += NORTH_WALL;
-                map[row2][col2] += SOUTH_WALL;
+                map[row1][col1][NORTH] = 1;
+                map[row2][col2][SOUTH] = 1;
             } else {
                 // wall position: pos2's NORTH and pos1's SOUTH
-                map[row1][col1] += SOUTH_WALL;
-                map[row2][col2] += NORTH_WALL;
+                map[row1][col1][SOUTH] = 1;
+                map[row2][col2][NORTH] = 1;
             }
         }
         return TRUE;
@@ -95,27 +95,27 @@ int setWall(unsigned int map[N_ROW][N_COL], unsigned int row1, unsigned int col1
     return FALSE;
 }
 
-int setWall2(unsigned int map[N_ROW][N_COL], unsigned int pos1[MAP_DIMS], unsigned int pos2[MAP_DIMS]) {
+int setWall2(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int pos1[MAP_DIMS], unsigned int pos2[MAP_DIMS]) {
     if (isNeighbour2(pos1, pos2)) {
         if (pos1[ROW_CODE] == pos2[ROW_CODE]) {
             if (pos1[COL_CODE] > pos2[COL_CODE]) {
                 // wall position: pos2's EAST and pos1's WEST
-                map[pos1[ROW_CODE]][pos1[COL_CODE]] += WEST_WALL;
-                map[pos2[ROW_CODE]][pos2[COL_CODE]] += EAST_WALL;
+                map[pos1[ROW_CODE]][pos1[COL_CODE]][WEST] += 1;
+                map[pos2[ROW_CODE]][pos2[COL_CODE]][EAST] += 1;
             } else {
                 // wall position: pos1's EAST and pos2's WEST
-                map[pos1[ROW_CODE]][pos1[COL_CODE]] += EAST_WALL;
-                map[pos2[ROW_CODE]][pos2[COL_CODE]] += WEST_WALL;
+                map[pos1[ROW_CODE]][pos1[COL_CODE]][EAST] += 1;
+                map[pos2[ROW_CODE]][pos2[COL_CODE]][WEST] += 1;
             }
         } else if (pos1[COL_CODE] == pos2[COL_CODE]) {
             if (pos1[ROW_CODE] > pos2[ROW_CODE]) {
                 // wall position: pos2's SOUTH and pos1's NORTH
-                map[pos1[ROW_CODE]][pos1[COL_CODE]] += NORTH_WALL;
-                map[pos2[ROW_CODE]][pos2[COL_CODE]] += SOUTH_WALL;
+                map[pos1[ROW_CODE]][pos1[COL_CODE]][NORTH] = 1;
+                map[pos2[ROW_CODE]][pos2[COL_CODE]][SOUTH] = 1;
             } else {
                 // wall position: pos2's NORTH and pos1's SOUTH
-                map[pos1[ROW_CODE]][pos1[COL_CODE]] += SOUTH_WALL;
-                map[pos2[ROW_CODE]][pos2[COL_CODE]] += NORTH_WALL;
+                map[pos1[ROW_CODE]][pos1[COL_CODE]][SOUTH] = 1;
+                map[pos2[ROW_CODE]][pos2[COL_CODE]][NORTH] = 1;
             }
         }
         return TRUE;
