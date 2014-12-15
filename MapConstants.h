@@ -20,3 +20,7 @@
 
 /************** for interface 2 ***************/
 #define N_WALL 4
+#define N_SENSORS 3
+#define FRONT 0
+#define LEFT 1
+#define RIGHT 2

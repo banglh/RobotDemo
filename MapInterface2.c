@@ -152,34 +152,36 @@ int checkWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row1, unsigne
     }
 }
 
-//unsigned int getNorthBit(unsigned int val) {
-//    // implement getNorthBit
-//    unsigned int tmp = val;
-//    tmp >>= NORTH;  // shift right to NORTH bit
-//    tmp &= 1;   // and with 1
-//    return tmp;
-//}
-//unsigned int getEastBit(unsigned int val) {
-//    // implement getEastBit
-//    unsigned int tmp = val;
-//    tmp >>= EAST;  // shift right to EAST bit
-//    tmp &= 1;   // and with 1
-//    return tmp;
-//}
-//unsigned int getWestBit(unsigned int val) {
-//    // implement getWestBit
-//    unsigned int tmp = val;
-//    tmp >>= WEST;  // shift right to WEST bit
-//    tmp &= 1;   // and with 1
-//    return tmp;
-//}
-//unsigned int getSouthBit(unsigned int val) {
-//    // implement getSouthBit
-//    unsigned int tmp = val;
-//    tmp >>= SOUTH;  // shift right to SOUTH bit
-//    tmp &= 1;   // and with 1
-//    return tmp;
-//}
+void getSensors(unsigned int sensors[N_SENSORS], unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir) {
+
+    switch (rbDir) {
+    case NORTH:
+        sensors[FRONT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][NORTH];
+        sensors[LEFT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][WEST];
+        sensors[RIGHT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][EAST];
+        break;
+    case EAST:
+        sensors[FRONT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][EAST];
+        sensors[LEFT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][NORTH];
+        sensors[RIGHT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][SOUTH];
+        break;
+    case WEST:
+        sensors[FRONT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][WEST];
+        sensors[LEFT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][SOUTH];
+        sensors[RIGHT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][NORTH];
+        break;
+    case SOUTH:
+        sensors[FRONT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][SOUTH];
+        sensors[LEFT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][EAST];
+        sensors[RIGHT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][WEST];
+        break;
+    }
+    int i;
+    for (i = 0; i < N_SENSORS; i++) {
+        printf("%d ", sensors[i]);
+    }
+    printf("\n");
+}
 
 /******************************** Position related functions **************************************/
 int isValidPos(unsigned int row, unsigned int col) {

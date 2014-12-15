@@ -4,6 +4,7 @@
 
 // an 2D array for encoding map information
 unsigned int map[N_ROW][N_COL][N_WALL];
+unsigned int sensors[N_SENSORS];
 
 // position of the robot
 unsigned int robotPos[MAP_DIMS];
@@ -21,48 +22,14 @@ int main()
     mapInit(map);
     printMap(map);
 
-    setWall(map, 2,2,2,3);
-    printf("\n");
-    printMap(map);
-    printf("%d\n", checkWall(map, 2,2,2,3));
+    setPos(robotPos, 0, 1);
+    setRobotDirection(&robotDir, EAST);
 
-//    int row1, col1, row2, col2;
-//    char c = 'y';
-    robotDir = WEST;
-    printf("after turn Left: ");
-    printRobotDirection(turnLeft(robotDir));
-//    setRobotDirection(&robotDir, dir);
-//    printRobotDirection(robotDir);
-    setPos(robotPos, 1,1);
-    setWallFront(map, robotPos, robotDir);
+    getSensors(sensors, map, robotPos, robotDir);
+    int i;
+    for (i = 0; i < N_SENSORS; i++) {
+        printf("%d ", sensors[i]);
+    }
     printf("\n");
-    printMap(map);
-//    setPos(goalPos, 1,1);
-//    if (isNeighbour2(humanPos, goalPos))
-//        printf("is neighbours\n");
-//    else
-//        printf("not neighbours\n");
-//    while(c == 'y' || c=='Y') {
-//        printf("set wall");
-//        printf("Row1 = ");
-//        scanf("%d", &row1);
-//        printf("Col1 = ");
-//        scanf("%d", &col1);
-//        printf("Row2 = ");
-//        scanf("%d", &row2);
-//        printf("Col2 = ");
-//        scanf("%d", &col2);
-//        unsigned int pos1[MAP_DIMS] = {row1, col1};
-//        unsigned int pos2[MAP_DIMS] = {row2, col2};
-//        if (setWall2(map, pos1, pos2)) {
-//            printMap(map);
-//        } else {
-//            printf("row or col is invalid\n");
-//            printMap(map);
-//        }
-//        printf("continue? (y/n) ");
-//        getchar();
-//        c =getchar();
-//    }
     return 0;
 }
