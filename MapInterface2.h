@@ -29,9 +29,15 @@ int setPos(unsigned int pos[MAP_DIMS], unsigned int newRow, unsigned int newCol)
 /******************************** Robot direction related functions **************************************/
 int setRobotDirection(unsigned int * rbDir, unsigned int newDir);
 void printRobotDirection(unsigned int rbDir);
+
 int turnLeft(unsigned int rbDir);
 int turnRight(unsigned int rbDir);
 int turn180(unsigned int rbDir);
+
+int setNorthWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS]);
+int setEastWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS]);
+int setWestWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS]);
+int setSouthWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS]);
 int setWallFront(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir);
 int setWallLeft(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir);
 int setWallRight(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir);

@@ -311,8 +311,69 @@ int turn180(unsigned int rbDir) {
     }
 }
 
+int setNorthWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS]) {
+    // TODO
+    // update wall information for current position
+    map[rbPos[ROW_CODE]][rbPos[COL_CODE]][NORTH] = 1;
+
+    // update wall information for the neighbour position if any
+    if (isValidPos(rbPos[ROW_CODE] - 1, rbPos[COL_CODE])) {
+        map[rbPos[ROW_CODE] - 1][rbPos[COL_CODE]][SOUTH] = 1;
+    }
+    return TRUE;
+}
+
+int setEastWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS]) {
+    // TODO
+    // update wall information for current position
+    map[rbPos[ROW_CODE]][rbPos[COL_CODE]][EAST] = 1;
+
+    // update wall information for the neighbour position if any
+    if (isValidPos(rbPos[ROW_CODE], rbPos[COL_CODE] + 1)) {
+        map[rbPos[ROW_CODE]][rbPos[COL_CODE] + 1][WEST] = 1;
+    }
+    return TRUE;
+}
+
+int setWestWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS]) {
+    // TODO
+    // update wall information for current position
+    map[rbPos[ROW_CODE]][rbPos[COL_CODE]][WEST] = 1;
+
+    // update wall information for the neighbour position if any
+    if (isValidPos(rbPos[ROW_CODE], rbPos[COL_CODE] - 1)) {
+        map[rbPos[ROW_CODE]][rbPos[COL_CODE] - 1][EAST] = 1;
+    }
+    return TRUE;
+}
+
+int setSouthWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS]) {
+    // TODO
+    // update wall information for current position
+    map[rbPos[ROW_CODE]][rbPos[COL_CODE]][SOUTH] = 1;
+
+    // update wall information for the neighbour position if any
+    if (isValidPos(rbPos[ROW_CODE] + 1, rbPos[COL_CODE])) {
+        map[rbPos[ROW_CODE] + 1][rbPos[COL_CODE]][NORTH] = 1;
+    }
+    return TRUE;
+}
+
 int setWallFront(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir){
     // TODO
+    switch (rbDir) {
+    case NORTH:
+
+        break;
+    case EAST:
+        break;
+    case WEST:
+        break;
+    case SOUTH:
+        break;
+    default:
+        break;
+    }
 }
 int setWallLeft(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir) {
     // TODO

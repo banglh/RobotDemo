@@ -34,7 +34,19 @@ int main()
     printRobotDirection(turnLeft(dir));
 //    setRobotDirection(&robotDir, dir);
 //    printRobotDirection(robotDir);
-//    setPos(humanPos, 0,0);
+    setPos(robotPos, 1,1);
+    setNorthWall(map, robotPos);
+    printf("set North wall\n");
+    printMap(map);
+    setEastWall(map, robotPos);
+    printf("set East wall\n");
+    printMap(map);
+    setWestWall(map, robotPos);
+    printf("set West wall\n");
+    printMap(map);
+    setSouthWall(map, robotPos);
+    printf("set South wall\n");
+    printMap(map);
 //    setPos(goalPos, 1,1);
 //    if (isNeighbour2(humanPos, goalPos))
 //        printf("is neighbours\n");
