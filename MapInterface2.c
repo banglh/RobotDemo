@@ -264,3 +264,49 @@ void printRobotDirection(unsigned int rbDir) {
     }
 }
 
+int turnLeft(unsigned int rbDir) {
+    // turnLeft
+    switch (rbDir) {
+    case NORTH:
+        return WEST;
+    case EAST:
+        return NORTH;
+    case WEST:
+        return SOUTH;
+    case SOUTH:
+        return EAST;
+    default:
+        return -1;
+    }
+}
+int turnRight(unsigned int rbDir) {
+    // turnRight
+    switch (rbDir) {
+    case NORTH:
+        return EAST;
+    case EAST:
+        return SOUTH;
+    case WEST:
+        return NORTH;
+    case SOUTH:
+        return WEST;
+    default:
+        return -1;
+    }
+}
+
+int turn180(unsigned int rbDir) {
+    // turn180
+    switch (rbDir) {
+    case NORTH:
+        return SOUTH;
+    case EAST:
+        return WEST;
+    case WEST:
+        return EAST;
+    case SOUTH:
+        return NORTH;
+    default:
+        return -1;
+    }
+}

@@ -25,10 +25,13 @@ int main()
     printf("\n");
     printMap(map);
     printf("%d\n", checkWall(map, 2,2,2,3));
+
 //    int row1, col1, row2, col2;
 //    char c = 'y';
-//    robotDir = 4;
-//    unsigned int dir = EAST;
+    robotDir = 4;
+    unsigned int dir = EAST;
+    printf("after turn Left: ");
+    printRobotDirection(turnLeft(dir));
 //    setRobotDirection(&robotDir, dir);
 //    printRobotDirection(robotDir);
 //    setPos(humanPos, 0,0);

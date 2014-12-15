@@ -17,7 +17,7 @@ int checkWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row1, unsigne
 //unsigned int getWestBit(unsigned int val);
 //unsigned int getSouthBit(unsigned int val);
 
-// position related functions
+/******************************** Position related functions **************************************/
 int isValidPos(unsigned int row, unsigned int col);
 int isValidPos2(unsigned int pos[MAP_DIMS]);
 unsigned int getRow(unsigned int pos[MAP_DIMS]);    // get row index
@@ -26,6 +26,9 @@ int setRow(unsigned int pos[MAP_DIMS], unsigned int newRow);    // set row index
 int setCol(unsigned int pos[MAP_DIMS], unsigned int newCol);    // set column index
 int setPos(unsigned int pos[MAP_DIMS], unsigned int newRow, unsigned int newCol);   // set row and column index
 
-// robot direction related functions
+/******************************** Robot direction related functions **************************************/
 int setRobotDirection(unsigned int * rbDir, unsigned int newDir);
 void printRobotDirection(unsigned int rbDir);
+int turnLeft(unsigned int rbDir);
+int turnRight(unsigned int rbDir);
+int turn180(unsigned int rbDir);
