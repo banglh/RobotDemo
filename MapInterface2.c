@@ -3,11 +3,11 @@
 
 /******************************** Map related functions **************************************/
 void mapInit(unsigned int map[N_ROW][N_COL][N_WALL]) {
-    int i,j;
+    int i,j,z;
 
     for (i = 0; i < N_ROW; i++) {
         for (j = 0; j < N_COL; j++) {
-            for (z =0; z < N_WALL; z++) {
+            for (z = 0; z < N_WALL; z++) {
                 map[i][j][z] = 0;
             }
         }
@@ -32,11 +32,15 @@ void mapInit(unsigned int map[N_ROW][N_COL][N_WALL]) {
 }
 
 void printMap(unsigned int map[N_ROW][N_COL][N_WALL]) {
-    int i,j;
+    int i,j,val;
 
     for (i = 0; i < N_ROW; i++) {
         for (j = 0; j < N_COL; j++) {
-            printf("%4d", map[i][j]);
+            val = map[i][j][NORTH] * NORTH_WALL
+                + map[i][j][EAST] * EAST_WALL
+                + map[i][j][WEST] * WEST_WALL
+                + map[i][j][SOUTH] * SOUTH_WALL;
+            printf("%4d", val);
         }
         printf("\n");
     }
