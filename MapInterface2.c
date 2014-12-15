@@ -123,26 +123,26 @@ int setWall2(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int pos1[MAP_DIMS]
     return FALSE;
 }
 
-int checkWall(unsigned int map[N_ROW][N_COL], unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2) {
+int checkWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2) {
     if (isNeighbour(row1, col1, row2, col2)) {
         if (row1 == row2) {
             if (col1 > col2) {
-                // TODO check WEST bit of pos1 or EAST bit of pos2
-                if (getWestBit(map[row1][col1]))
+                // check WEST bit of pos1 or EAST bit of pos2
+                if (map[row1][col1][WEST])
                     return TRUE;
             } else {
-                // TODO check EAST bit of pos1 or WEST bit of pos2
-                if (getEastBit(map[row1][col1]))
+                // check EAST bit of pos1 or WEST bit of pos2
+                if (map[row1][col1][EAST])
                     return TRUE;
             }
         } else if (col1 == col2) {
             if (row1 > row2) {
-                // TODO check NORTH bit of pos1 or SOUTH bit of pos2
-                if (getNorthBit(map[row1][col1]))
+                // check NORTH bit of pos1 or SOUTH bit of pos2
+                if (map[row1][col1][NORTH])
                     return TRUE;
             } else {
-                // TODO check SOUTH bit of pos1 or NORTH bit of pos2
-                if (getSouthBit(map[row1][col1]))
+                // check SOUTH bit of pos1 or NORTH bit of pos2
+                if (map[row1][col1][SOUTH])
                     return TRUE;
             }
         }
@@ -152,34 +152,34 @@ int checkWall(unsigned int map[N_ROW][N_COL], unsigned int row1, unsigned int co
     }
 }
 
-unsigned int getNorthBit(unsigned int val) {
-    // implement getNorthBit
-    unsigned int tmp = val;
-    tmp >>= NORTH;  // shift right to NORTH bit
-    tmp &= 1;   // and with 1
-    return tmp;
-}
-unsigned int getEastBit(unsigned int val) {
-    // implement getEastBit
-    unsigned int tmp = val;
-    tmp >>= EAST;  // shift right to EAST bit
-    tmp &= 1;   // and with 1
-    return tmp;
-}
-unsigned int getWestBit(unsigned int val) {
-    // implement getWestBit
-    unsigned int tmp = val;
-    tmp >>= WEST;  // shift right to WEST bit
-    tmp &= 1;   // and with 1
-    return tmp;
-}
-unsigned int getSouthBit(unsigned int val) {
-    // implement getSouthBit
-    unsigned int tmp = val;
-    tmp >>= SOUTH;  // shift right to SOUTH bit
-    tmp &= 1;   // and with 1
-    return tmp;
-}
+//unsigned int getNorthBit(unsigned int val) {
+//    // implement getNorthBit
+//    unsigned int tmp = val;
+//    tmp >>= NORTH;  // shift right to NORTH bit
+//    tmp &= 1;   // and with 1
+//    return tmp;
+//}
+//unsigned int getEastBit(unsigned int val) {
+//    // implement getEastBit
+//    unsigned int tmp = val;
+//    tmp >>= EAST;  // shift right to EAST bit
+//    tmp &= 1;   // and with 1
+//    return tmp;
+//}
+//unsigned int getWestBit(unsigned int val) {
+//    // implement getWestBit
+//    unsigned int tmp = val;
+//    tmp >>= WEST;  // shift right to WEST bit
+//    tmp &= 1;   // and with 1
+//    return tmp;
+//}
+//unsigned int getSouthBit(unsigned int val) {
+//    // implement getSouthBit
+//    unsigned int tmp = val;
+//    tmp >>= SOUTH;  // shift right to SOUTH bit
+//    tmp &= 1;   // and with 1
+//    return tmp;
+//}
 
 /******************************** Position related functions **************************************/
 int isValidPos(unsigned int row, unsigned int col) {

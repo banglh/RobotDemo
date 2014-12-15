@@ -10,12 +10,12 @@ int isNeighbour2(unsigned int pos1[MAP_DIMS], unsigned int pos2[MAP_DIMS]);
 int setWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2); // set wall between two positions
 int setWall2(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int pos1[MAP_DIMS], unsigned int pos2[MAP_DIMS]); // set wall between two positions
 // check if wall exists between two neighbours
-int checkWall(unsigned int map[N_ROW][N_COL], unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2);
+int checkWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2);
 // get N, W, S, E wall bit
-unsigned int getNorthBit(unsigned int val);
-unsigned int getEastBit(unsigned int val);
-unsigned int getWestBit(unsigned int val);
-unsigned int getSouthBit(unsigned int val);
+//unsigned int getNorthBit(unsigned int val);
+//unsigned int getEastBit(unsigned int val);
+//unsigned int getWestBit(unsigned int val);
+//unsigned int getSouthBit(unsigned int val);
 
 // position related functions
 int isValidPos(unsigned int row, unsigned int col);
