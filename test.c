@@ -28,24 +28,14 @@ int main()
 
 //    int row1, col1, row2, col2;
 //    char c = 'y';
-    robotDir = 4;
-    unsigned int dir = EAST;
+    robotDir = WEST;
     printf("after turn Left: ");
-    printRobotDirection(turnLeft(dir));
+    printRobotDirection(turnLeft(robotDir));
 //    setRobotDirection(&robotDir, dir);
 //    printRobotDirection(robotDir);
     setPos(robotPos, 1,1);
-    setNorthWall(map, robotPos);
-    printf("set North wall\n");
-    printMap(map);
-    setEastWall(map, robotPos);
-    printf("set East wall\n");
-    printMap(map);
-    setWestWall(map, robotPos);
-    printf("set West wall\n");
-    printMap(map);
-    setSouthWall(map, robotPos);
-    printf("set South wall\n");
+    setWallFront(map, robotPos, robotDir);
+    printf("\n");
     printMap(map);
 //    setPos(goalPos, 1,1);
 //    if (isNeighbour2(humanPos, goalPos))

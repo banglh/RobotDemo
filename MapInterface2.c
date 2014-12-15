@@ -363,21 +363,61 @@ int setWallFront(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_
     // TODO
     switch (rbDir) {
     case NORTH:
-
+        setNorthWall(map, rbPos);
         break;
     case EAST:
+        setEastWall(map, rbPos);
         break;
     case WEST:
+        setWestWall(map, rbPos);
         break;
     case SOUTH:
+        setSouthWall(map, rbPos);
         break;
     default:
         break;
     }
+    return TRUE;
 }
+
 int setWallLeft(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir) {
     // TODO
+    switch (rbDir) {
+    case NORTH:
+        setWestWall(map, rbPos);
+        break;
+    case EAST:
+        setNorthWall(map, rbPos);
+        break;
+    case WEST:
+        setSouthWall(map, rbPos);
+        break;
+    case SOUTH:
+        setEastWall(map, rbPos);
+        break;
+    default:
+        break;
+    }
+    return TRUE;
 }
+
 int setWallRight(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir) {
     // TODO
+    switch (rbDir) {
+    case NORTH:
+        setEastWall(map, rbPos);
+        break;
+    case EAST:
+        setSouthWall(map, rbPos);
+        break;
+    case WEST:
+        setNorthWall(map, rbPos);
+        break;
+    case SOUTH:
+        setWestWall(map, rbPos);
+        break;
+    default:
+        break;
+    }
+    return TRUE;
 }
