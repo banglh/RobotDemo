@@ -280,26 +280,30 @@ int main()
     mapInit(map);
     setPos(startPos, 3, 0);
     setPos(robotPos, 3, 0);
-    setDirection(&robotDir, NORTH);
+    setDirection(&robotDir, SOUTH);
     stackInit(&rowStack);
     stackInit(&colStack);
     push(&rowStack, robotPos[ROW_CODE]);
     push(&colStack, robotPos[COL_CODE]);
 
-    int c;
+    // run
+    // if there are walls on left, right and in front of the robot -> turn 180 degree
+    getSensors(sensors, rMap, robotPos, robotDir);
+    if (sensors[FRONT] && sensors[LEFT] && sensors[RIGHT])
+        setDirection(&robotDir, turn180(robotDir));
+
+    int stepN = 0;
     while (TRUE) {
+        stepN++;
+
         step();
 
-        printf("Next position: (%d, %d)\n", nextPos[ROW_CODE], nextPos[COL_CODE]);
-        printf("row stack: "); printStack(rowStack);
-        printf("col stack: "); printStack(colStack);
+        printf("Step %d: next position: (%d, %d)\n", stepN, nextPos[ROW_CODE], nextPos[COL_CODE]);
 
         if (isValidPos2(nextPos))
             move();
         else
             break;
-
-        scanf("%d", &c);
     }
 
     printMap(map);
