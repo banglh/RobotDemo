@@ -12,19 +12,19 @@ int setDirection(unsigned int * rbDir, unsigned int newDir) {
 void printDirection(unsigned int rbDir) {
     switch (rbDir) {
     case NORTH:
-        printf("Current robot direction: NORTH\n");
+        printf("NORTH");
         break;
     case SOUTH:
-        printf("Current robot direction: SOUTH\n");
+        printf("SOUTH");
         break;
     case EAST:
-        printf("Current robot direction: EAST\n");
+        printf("EAST");
         break;
     case WEST:
-        printf("Current robot direction: WEST\n");
+        printf("WEST");
         break;
     default:
-        printf("Current robot direction: N/A\n");
+        printf("N/A");
     }
 }
 

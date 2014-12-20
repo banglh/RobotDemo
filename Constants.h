@@ -25,3 +25,8 @@
 #define RIGHT 2
 
 #define STACK_SIZE 24
+
+#define MOVE_FORWARD 0
+#define MOVE_LEFT 1
+#define MOVE_RIGHT 2
+#define MOVE_BACKWARD 3

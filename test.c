@@ -245,7 +245,7 @@ void getNextPos() {
 
 }
 
-void step() {
+int step() {
     // TODO mark current position as visited
     setVisited(visited, robotPos);
 
@@ -257,6 +257,11 @@ void step() {
 
     // TODO decide next position to go
     getNextPos();
+
+    // get action
+    int action = getAction(robotPos, nextPos, robotDir);
+
+    return action;
 }
 
 
@@ -293,15 +298,22 @@ int main()
         setDirection(&robotDir, turn180(robotDir));
 
     int stepN = 0;
+    int action;
+    printf("%-5s | %-10s | %-10s | %-s\n", "Step", "Position", "Direction", "Action");
     while (TRUE) {
         stepN++;
 
-        step();
+        action = step();
 
-        printf("Step %d: next position: (%d, %d)\n", stepN, nextPos[ROW_CODE], nextPos[COL_CODE]);
+        printf("%-5d | (%-d, %-d) | ", stepN, robotPos[ROW_CODE], robotPos[COL_CODE]);
+        printDirection(robotDir);
+        printf(" | ");
+        printAction(action);
+        printf("\n");
 
-        if (isValidPos2(nextPos))
+        if (isValidPos2(nextPos)) {
             move();
+        }
         else
             break;
     }
