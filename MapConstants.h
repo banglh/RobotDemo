@@ -24,3 +24,6 @@
 #define FRONT 0
 #define LEFT 1
 #define RIGHT 2
+
+/*** for stack ***/
+#define STACK_SIZE 24

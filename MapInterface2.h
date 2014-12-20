@@ -13,6 +13,13 @@ int setWall2(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int pos1[MAP_DIMS]
 int checkWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2);
 
 void getSensors(unsigned int sensors[N_SENSORS], unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir);
+void getWallInfo(unsigned int sensors[N_SENSORS], unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir);
+void updateWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int sensors[N_SENSORS], unsigned int rbPos[MAP_DIMS], unsigned int rbDir);
+
+void visitLogInit(unsigned int visit[N_ROW][N_COL]);
+int isVisited2(unsigned int visit[N_ROW][N_COL], unsigned int pos[MAP_DIMS]);
+int isVisited(unsigned int visit[N_ROW][N_COL], unsigned int row, unsigned int col);
+void setVisited(unsigned int visit[N_ROW][N_COL], unsigned int pos[MAP_DIMS]);
 
 /******************************** Position related functions **************************************/
 int isValidPos(unsigned int row, unsigned int col);
@@ -38,3 +45,5 @@ int setSouthWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_
 int setWallFront(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir);
 int setWallLeft(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir);
 int setWallRight(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir);
+
+int getNewDirection(unsigned int oldPos[MAP_DIMS], unsigned int newPos[MAP_DIMS]);

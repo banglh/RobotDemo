@@ -176,11 +176,70 @@ void getSensors(unsigned int sensors[N_SENSORS], unsigned int map[N_ROW][N_COL][
         sensors[RIGHT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][WEST];
         break;
     }
-    int i;
-    for (i = 0; i < N_SENSORS; i++) {
-        printf("%d ", sensors[i]);
+
+}
+
+void getWallInfo(unsigned int wallinfo[N_SENSORS], unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir) {
+    switch (rbDir) {
+    case NORTH:
+        wallinfo[FRONT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][NORTH];
+        wallinfo[LEFT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][WEST];
+        wallinfo[RIGHT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][EAST];
+        break;
+    case EAST:
+        wallinfo[FRONT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][EAST];
+        wallinfo[LEFT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][NORTH];
+        wallinfo[RIGHT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][SOUTH];
+        break;
+    case WEST:
+        wallinfo[FRONT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][WEST];
+        wallinfo[LEFT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][SOUTH];
+        wallinfo[RIGHT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][NORTH];
+        break;
+    case SOUTH:
+        wallinfo[FRONT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][SOUTH];
+        wallinfo[LEFT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][EAST];
+        wallinfo[RIGHT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][WEST];
+        break;
     }
-    printf("\n");
+}
+
+void updateWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int sensors[N_SENSORS], unsigned int rbPos[MAP_DIMS], unsigned int rbDir) {
+    if (sensors[FRONT] == 1)
+        setWallFront(map, rbPos, rbDir);
+    if (sensors[LEFT] == 1)
+        setWallLeft(map, rbPos, rbDir);
+    if (sensors[RIGHT] ==1)
+        setWallRight(map, rbPos, rbDir);
+}
+
+void visitLogInit(unsigned int visit[N_ROW][N_COL]) {
+    int i,j;
+
+    for (i = 0; i < N_ROW; i++) {
+        for (j = 0; j < N_COL; j++) {
+            visit[i][j] = 0;
+        }
+    }
+}
+
+int isVisited2(unsigned int visit[N_ROW][N_COL], unsigned int pos[MAP_DIMS]) {
+    if (visit[pos[ROW_CODE]][pos[COL_CODE]] == 1)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+int isVisited(unsigned int visit[N_ROW][N_COL], unsigned int row, unsigned int col) {
+    if (visit[row][col] == 1)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+void setVisited(unsigned int visit[N_ROW][N_COL], unsigned int pos[MAP_DIMS]) {
+    if (visit[pos[ROW_CODE]][pos[COL_CODE]] == 0)
+        visit[pos[ROW_CODE]][pos[COL_CODE]] = 1;
 }
 
 /******************************** Position related functions **************************************/
@@ -422,4 +481,18 @@ int setWallRight(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_
         break;
     }
     return TRUE;
+}
+
+int getNewDirection(unsigned int oldPos[MAP_DIMS], unsigned int newPos[MAP_DIMS]) {
+    if (oldPos[ROW_CODE] == newPos[ROW_CODE]) {
+        if (oldPos[COL_CODE] > newPos[COL_CODE])
+            return WEST;
+        else
+            return EAST;
+    } else if (oldPos[COL_CODE] == newPos[COL_CODE]) {
+        if (oldPos[ROW_CODE] > newPos[ROW_CODE])
+            return NORTH;
+        else
+            return SOUTH;
+    }
 }
