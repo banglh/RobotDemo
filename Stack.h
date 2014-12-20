@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "MapConstants.h"
+#include "Constants.h"
 
 struct stack {
     unsigned int s[STACK_SIZE];

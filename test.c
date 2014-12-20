@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "MapInterface2.h"
+#include "Demo.h"
 #include "Stack.h"
+#include "Position.h"
+#include "Direction.h"
+#include "Map.h"
+#include "VisitLog.h"
 
 // real map
 unsigned int rMap[N_ROW][N_COL][N_WALL];
@@ -29,41 +33,6 @@ unsigned int goalPos[MAP_DIMS];
 // robot direction
 unsigned int robotDir;
 
-int main()
-{
-    // initialize and build real map
-    mapInit(rMap);
-    buildRealMap();
-
-    // initialize map and robot status
-    mapInit(map);
-    setPos(startPos, 3, 0);
-    setPos(robotPos, 3, 0);
-    setRobotDirection(&robotDir, NORTH);
-    stackInit(&rowStack);
-    stackInit(&colStack);
-    push(&rowStack, robotPos[ROW_CODE]);
-    push(&colStack, robotPos[COL_CODE]);
-
-    int c;
-    while (TRUE) {
-        step();
-
-        printf("Next position: (%d, %d)\n", nextPos[ROW_CODE], nextPos[COL_CODE]);
-        printf("row stack: "); printStack(rowStack);
-        printf("col stack: "); printStack(colStack);
-
-        if (isValidPos2(nextPos))
-            move();
-        else
-            break;
-
-        scanf("%d", &c);
-    }
-
-    printMap(map);
-}
-
 void buildRealMap() {
     setWall(rMap, 1,0,2,0);
     setWall(rMap, 1,0,1,1);
@@ -75,20 +44,6 @@ void buildRealMap() {
     setWall(rMap, 1,3,2,3);
     setWall(rMap, 1,4,2,4);
     setWall(rMap, 3,4,3,5);
-}
-
-void step() {
-    // TODO mark current position as visited
-    setVisited(visited, robotPos);
-
-    // TODO get sensors
-    getSensors(sensors, rMap, robotPos, robotDir);
-
-    // TODO update wall information
-    updateWall(map, sensors, robotPos, robotDir);
-
-    // TODO decide next position to go
-    getNextPos();
 }
 
 void getNextPos() {
@@ -290,6 +245,22 @@ void getNextPos() {
 
 }
 
+void step() {
+    // TODO mark current position as visited
+    setVisited(visited, robotPos);
+
+    // TODO get sensors
+    getSensors(sensors, rMap, robotPos, robotDir);
+
+    // TODO update wall information
+    updateWall(map, sensors, robotPos, robotDir);
+
+    // TODO decide next position to go
+    getNextPos();
+}
+
+
+
 void move() {
     // update robot direction
     robotDir = getNewDirection(robotPos, nextPos);
@@ -297,4 +268,41 @@ void move() {
     // update robot position
     robotPos[ROW_CODE] = nextPos[ROW_CODE];
     robotPos[COL_CODE] = nextPos[COL_CODE];
+}
+
+int main()
+{
+    // initialize and build real map
+    mapInit(rMap);
+    buildRealMap();
+
+    // initialize map and robot status
+    mapInit(map);
+    setPos(startPos, 3, 0);
+    setPos(robotPos, 3, 0);
+    setDirection(&robotDir, NORTH);
+    stackInit(&rowStack);
+    stackInit(&colStack);
+    push(&rowStack, robotPos[ROW_CODE]);
+    push(&colStack, robotPos[COL_CODE]);
+
+    int c;
+    while (TRUE) {
+        step();
+
+        printf("Next position: (%d, %d)\n", nextPos[ROW_CODE], nextPos[COL_CODE]);
+        printf("row stack: "); printStack(rowStack);
+        printf("col stack: "); printStack(colStack);
+
+        if (isValidPos2(nextPos))
+            move();
+        else
+            break;
+
+        scanf("%d", &c);
+    }
+
+    printMap(map);
+
+    return 0;
 }
