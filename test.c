@@ -44,10 +44,11 @@ void buildRealMap() {
     setWall(rMap, 1,3,2,3);
     setWall(rMap, 1,4,2,4);
     setWall(rMap, 3,4,3,5);
+    setWall(rMap, 1,2,1,3);
 }
 
 void getNextPos() {
-    // TODO check if there is any unvisited neighbour (order: front -> left -> right)
+    // check if there is any unvisited neighbour (order: front -> left -> right)
     unsigned int wallInfo[N_SENSORS];
     getWallInfo(wallInfo, map, robotPos, robotDir);
 
@@ -246,16 +247,16 @@ void getNextPos() {
 }
 
 int step() {
-    // TODO mark current position as visited
+    // mark current position as visited
     setVisited(visited, robotPos);
 
-    // TODO get sensors
+    // get sensors
     getSensors(sensors, rMap, robotPos, robotDir);
 
-    // TODO update wall information
+    // update wall information
     updateWall(map, sensors, robotPos, robotDir);
 
-    // TODO decide next position to go
+    // decide next position to go
     getNextPos();
 
     // get action

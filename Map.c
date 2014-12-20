@@ -186,7 +186,6 @@ void updateWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int sensors[N_S
 
 
 int setNorthWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS]) {
-    // TODO
     // update wall information for current position
     map[rbPos[ROW_CODE]][rbPos[COL_CODE]][NORTH] = 1;
 
@@ -198,7 +197,6 @@ int setNorthWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_
 }
 
 int setEastWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS]) {
-    // TODO
     // update wall information for current position
     map[rbPos[ROW_CODE]][rbPos[COL_CODE]][EAST] = 1;
 
@@ -210,7 +208,6 @@ int setEastWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_D
 }
 
 int setWestWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS]) {
-    // TODO
     // update wall information for current position
     map[rbPos[ROW_CODE]][rbPos[COL_CODE]][WEST] = 1;
 
@@ -222,7 +219,6 @@ int setWestWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_D
 }
 
 int setSouthWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS]) {
-    // TODO
     // update wall information for current position
     map[rbPos[ROW_CODE]][rbPos[COL_CODE]][SOUTH] = 1;
 
@@ -234,7 +230,6 @@ int setSouthWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_
 }
 
 int setWallFront(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir){
-    // TODO
     switch (rbDir) {
     case NORTH:
         setNorthWall(map, rbPos);
@@ -255,7 +250,6 @@ int setWallFront(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_
 }
 
 int setWallLeft(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir) {
-    // TODO
     switch (rbDir) {
     case NORTH:
         setWestWall(map, rbPos);
@@ -276,7 +270,6 @@ int setWallLeft(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_D
 }
 
 int setWallRight(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir) {
-    // TODO
     switch (rbDir) {
     case NORTH:
         setEastWall(map, rbPos);
