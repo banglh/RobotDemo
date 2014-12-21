@@ -32,6 +32,7 @@ void mapInit(unsigned int map[N_ROW][N_COL][N_WALL]) {
 void printMap(unsigned int map[N_ROW][N_COL][N_WALL]) {
     int i,j,val;
 
+    printf("\n");
     for (i = 0; i < N_ROW; i++) {
         for (j = 0; j < N_COL; j++) {
             val = map[i][j][NORTH] * NORTH_WALL
@@ -42,6 +43,7 @@ void printMap(unsigned int map[N_ROW][N_COL][N_WALL]) {
         }
         printf("\n");
     }
+    printf("\n");
 }
 
 int isNeighbour(unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2) {

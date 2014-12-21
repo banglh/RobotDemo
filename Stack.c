@@ -16,6 +16,21 @@ unsigned int pop(struct stack * st) {
     return item;
 }
 
+unsigned int popToIndex(struct stack * st, int index) {
+    // popToIndex
+    unsigned int item;
+    if (index >= (*st).top) {
+        item = (*st).s[(*st).top];
+    } else if (index > -1) {
+        item = (*st).s[index + 1];
+        (*st).top = index;
+    } else {
+        item = (*st).s[0];
+        (*st).top = -1;
+    }
+    return item;
+}
+
 unsigned int head(struct stack st) {
     if (isEmptyStack(st) == FALSE)
         return st.s[st.top];

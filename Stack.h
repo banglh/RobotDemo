@@ -9,6 +9,7 @@ struct stack {
 void stackInit(struct stack * st);
 void push(struct stack * st, unsigned int item);
 unsigned int pop(struct stack * st);
+unsigned int popToIndex(struct stack * st, int index);
 unsigned int head(struct stack st);
 int isEmptyStack(struct stack st);
 void printStack(struct stack st);
