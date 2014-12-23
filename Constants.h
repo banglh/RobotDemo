@@ -30,3 +30,6 @@
 #define MOVE_LEFT 1
 #define MOVE_RIGHT 2
 #define MOVE_BACKWARD 3
+
+/***** for queue ******/
+#define QUEUE_SIZE 24

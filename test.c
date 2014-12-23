@@ -6,6 +6,7 @@
 #include "Direction.h"
 #include "Map.h"
 #include "VisitLog.h"
+#include "PriorityQueue.h"
 
 // real map
 unsigned int rMap[N_ROW][N_COL][N_WALL];
@@ -374,6 +375,48 @@ void move() {
 
 int main()
 {
+    PriorityQueue pq;
+
+    queueInit(&pq);
+
+    QueueElement e = newQueueElement(0, 0, 1);
+    enqueue(&pq, e);
+    e = newQueueElement(0, 1, 7);
+    enqueue(&pq, e);
+    setQueueElement(&e, 2,2,4);
+    enqueue(&pq, e);
+    e = newQueueElement(11, 0, 5);
+    enqueue(&pq, e);
+    e = newQueueElement(2, 0, 3);
+    enqueue(&pq, e);
+    printQueue(pq);
+
+    e = dequeue(&pq);
+    printf("dequeued element: %d, %d, %d\n", e.row, e.col, e.priority);
+    printQueue(pq);
+
+    e = dequeue(&pq);
+    printf("dequeued element: %d, %d, %d\n", e.row, e.col, e.priority);
+    printQueue(pq);
+
+e = dequeue(&pq);
+    printf("dequeued element: %d, %d, %d\n", e.row, e.col, e.priority);
+    printQueue(pq);
+
+    e = dequeue(&pq);
+    printf("dequeued element: %d, %d, %d\n", e.row, e.col, e.priority);
+    printQueue(pq);
+
+e = dequeue(&pq);
+    printf("dequeued element: %d, %d, %d\n", e.row, e.col, e.priority);
+    printQueue(pq);
+
+    e = dequeue(&pq);
+    printf("dequeued element: %d, %d, %d\n", e.row, e.col, e.priority);
+    printQueue(pq);
+
+    /******************* DEMO ***************************
+
     // initialize and build real map
     mapInit(rMap);
     buildRealMap();
@@ -435,6 +478,7 @@ int main()
 
     // TODO call function to find the path to move the person to the final goal
 
+    /*********************************************************/
     return 0;
 }
 
