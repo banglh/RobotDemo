@@ -71,7 +71,7 @@ int isInStack2(unsigned int pos[MAP_DIMS]) {
 
 // find the deepest position in the stack which has unvisited neighbour
 int getDeepestPos() {
-    // TODO getDeepestPos
+    // getDeepestPos
     int i;
     for (i = rowStack.top; i > -1; i--) {
         if (hasUnvisitedNeighbour(map, visited, rowStack.s[i], colStack.s[i]))
@@ -291,7 +291,7 @@ void getNextPos() {
         return;
     }
 
-    // TODO backtrack
+    // backtrack
     pop(&rowStack);
     pop(&colStack);
 
@@ -429,5 +429,19 @@ int main()
     printf("Explored map: \n");
     printMap(map);
 
+    // TODO mark the corner positions in the visited array
+
+    // TODO reset stacks to reuse them as the solution stacks
+
+    // TODO call function to find the path to move the person to the final goal
+
     return 0;
+}
+
+// TODO implement the function to find a solution for rescuing the person
+int findSolution(unsigned int goalRow, unsigned int goalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
+    // TODO get subGoals and for each subGoal
+    // ...
+
+    return FALSE;
 }
