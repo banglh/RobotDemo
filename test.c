@@ -40,14 +40,14 @@ unsigned int robotDir;
 int stepN = 0;
 
 void buildRealMap() {
-//    setWall(rMap, 1,0,1,1);
-//    setWall(rMap, 2,1,3,1);
-//    setWall(rMap, 0,2,0,3);
-//    setWall(rMap, 2,2,2,3);
-//    setWall(rMap, 3,2,3,3);
-//    setWall(rMap, 1,3,2,3);
-//    setWall(rMap, 0,4,0,5);
-//    setWall(rMap, 0,5,1,5);
+    setWall(rMap, 1,0,1,1);
+    setWall(rMap, 2,1,3,1);
+    setWall(rMap, 0,2,0,3);
+    setWall(rMap, 2,2,2,3);
+    setWall(rMap, 3,2,3,3);
+    setWall(rMap, 1,3,2,3);
+    setWall(rMap, 0,4,0,5);
+    setWall(rMap, 0,5,1,5);
 }
 
 // check if a position is in stack or not
@@ -425,51 +425,68 @@ int isSubGoal(unsigned int checkRow, unsigned int checkCol, unsigned int curGoal
 
 // function to get subGoal candidates
 void getCandidates(int candidates[4][MAP_DIMS], unsigned int curGoalRow, unsigned int curGoalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
-
-    if (isSamePos(curGoalRow, curGoalCol, prevGoalRow, prevGoalCol)) {
-        int j = 0;
-        int i;
-        for (i = -2; i < 3; i++) {
-            if (i != 0) {
-                candidates[j][ROW_CODE] = curGoalRow + i/2;
-                candidates[j][COL_CODE] = curGoalCol + i%2;
-                j++;
-            }
+    // get candidates
+    int j = 0;
+    int i;
+    for (i = -2; i < 3; i++) {
+        if (i != 0) {
+            candidates[j][ROW_CODE] = curGoalRow + i/2;
+            candidates[j][COL_CODE] = curGoalCol + i%2;
+            j++;
         }
     }
-    else {
-        // first candidate
-        candidates[0][ROW_CODE] = curGoalRow + curGoalRow - prevGoalRow;
-        candidates[0][COL_CODE] = curGoalCol + curGoalCol - prevGoalCol;
 
-        if (curGoalRow == prevGoalRow) {
-            candidates[1][ROW_CODE] = curGoalRow - 1;
-            candidates[1][COL_CODE] = curGoalCol;
+    // sort candidates
+    int tmpRow, tmpCol, costi, costj;
+    int acrossRow = curGoalRow + curGoalRow - prevGoalRow;
+    int acrossCol = curGoalCol + curGoalCol - prevGoalCol;
+    for (i = 0; i < 3; i++) {
+        for (j = i+1; j < 4; j++) {
+            // get cost i
+            if (isValidPos(candidates[i][ROW_CODE], candidates[i][COL_CODE]))
+                costi = estimateCost(candidates[i][ROW_CODE], candidates[i][COL_CODE], humanPos[ROW_CODE], humanPos[COL_CODE]);
+            else
+                costi = MAX_VALUE;
 
-            candidates[2][ROW_CODE] = curGoalRow + 1;
-            candidates[2][COL_CODE] = curGoalCol;
-        } else if (curGoalCol == prevGoalCol) {
-            candidates[1][ROW_CODE] = curGoalRow;
-            candidates[1][COL_CODE] = curGoalCol - 1;
+            // get cost j
+            if (isValidPos(candidates[j][ROW_CODE], candidates[j][COL_CODE]))
+                costj = estimateCost(candidates[j][ROW_CODE], candidates[j][COL_CODE], humanPos[ROW_CODE], humanPos[COL_CODE]);
+            else
+                costj = MAX_VALUE;
 
-            candidates[2][ROW_CODE] = curGoalRow;
-            candidates[2][COL_CODE] = curGoalCol + 1;
+            // exchange if costi > costj
+            if (costi > costj) {
+                tmpRow = candidates[i][ROW_CODE];
+                tmpCol = candidates[i][COL_CODE];
+                candidates[i][ROW_CODE] = candidates[j][ROW_CODE];
+                candidates[i][COL_CODE] = candidates[j][COL_CODE];
+                candidates[j][ROW_CODE] = tmpRow;
+                candidates[j][COL_CODE] = tmpCol;
+            }
+
+            if (costi == costj && costi != MAX_VALUE) {
+                if (candidates[j][ROW_CODE] == acrossRow && candidates[j][COL_CODE] == acrossCol) {
+                    tmpRow = candidates[i][ROW_CODE];
+                    tmpCol = candidates[i][COL_CODE];
+                    candidates[i][ROW_CODE] = candidates[j][ROW_CODE];
+                    candidates[i][COL_CODE] = candidates[j][COL_CODE];
+                    candidates[j][ROW_CODE] = tmpRow;
+                    candidates[j][COL_CODE] = tmpCol;
+                }
+            }
         }
-
-        // last candidate is prevGoal
-        candidates[3][ROW_CODE] = prevGoalRow;
-        candidates[3][COL_CODE] = prevGoalCol;
     }
 }
 
 // implement the function to find a solution for rescuing the person
+// TODO: [Bug] infinitive function call when there is no solution
 int findSolution(unsigned int goalRow, unsigned int goalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
     int candidates[4][MAP_DIMS];
 
     // get candidates
     getCandidates(candidates, goalRow, goalCol, prevGoalRow, prevGoalCol);
 
-    /*******/
+    /*******
     printf("current goal: (%d, %d), prevGoal: (%d, %d)\n", goalRow, goalCol, prevGoalRow, prevGoalCol);
     int i;
     for (i = 0; i < 4; i++) {
@@ -543,11 +560,11 @@ int main()
     setDirection(&robotDir, NORTH);
 
     // set human position
-    setPos(humanPos, 2, 2);
+    setPos(humanPos, 2,5);
     setVisited2(visited, humanPos);
 
     // set goal position
-    setPos(goalPos, 3, 0);
+    setPos(goalPos, 0, 0);
 
     // initialize stacks
     stackInit(&rowStack);
@@ -596,7 +613,14 @@ int main()
     resetStack(&colStack);
 
     // call function to find the path to move the person to the final goal
-    int hasSolution = findSolution(goalPos[ROW_CODE], goalPos[COL_CODE], goalPos[ROW_CODE], goalPos[COL_CODE]);
+    int hasSolution;
+    if (!isCornerPos(visited, humanPos[ROW_CODE], humanPos[COL_CODE])
+        && hasPath(map, humanPos[ROW_CODE], humanPos[COL_CODE], goalPos[ROW_CODE], goalPos[COL_CODE], -1, -1)
+        && hasPath(map, humanPos[ROW_CODE], humanPos[COL_CODE], startPos[ROW_CODE], startPos[COL_CODE], -1, -1)) {
+            hasSolution = findSolution(goalPos[ROW_CODE], goalPos[COL_CODE], goalPos[ROW_CODE], goalPos[COL_CODE]);
+    } else {
+        hasSolution = FALSE;
+    }
 
     if (hasSolution) {
         printStack(rowStack);

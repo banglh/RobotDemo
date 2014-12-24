@@ -33,3 +33,4 @@
 
 /***** for queue ******/
 #define QUEUE_SIZE 24
+#define MAX_VALUE 10000
