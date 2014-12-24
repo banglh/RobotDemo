@@ -24,13 +24,16 @@
 #define LEFT 1
 #define RIGHT 2
 
-#define STACK_SIZE 24
+#define STACK_SIZE 30
 
 #define MOVE_FORWARD 0
 #define MOVE_LEFT 1
 #define MOVE_RIGHT 2
 #define MOVE_BACKWARD 3
 
-/***** for queue ******/
 #define QUEUE_SIZE 24
 #define MAX_VALUE 10000
+
+#define MAX_DEPTH 30
+
+

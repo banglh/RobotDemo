@@ -44,7 +44,7 @@ void buildRealMap() {
     setWall(rMap, 2,1,3,1);
     setWall(rMap, 0,2,0,3);
     setWall(rMap, 2,2,2,3);
-    setWall(rMap, 3,2,3,3);
+//    setWall(rMap, 3,2,3,3);
     setWall(rMap, 1,3,2,3);
     setWall(rMap, 0,4,0,5);
     setWall(rMap, 0,5,1,5);
@@ -479,19 +479,24 @@ void getCandidates(int candidates[4][MAP_DIMS], unsigned int curGoalRow, unsigne
 }
 
 // implement the function to find a solution for rescuing the person
-// TODO: [Bug] infinitive function call when there is no solution
-int findSolution(unsigned int goalRow, unsigned int goalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
+// [Bug fixed] infinitive function call when there is no solution
+int findSolution(unsigned int goalRow, unsigned int goalCol, unsigned int prevGoalRow, unsigned int prevGoalCol, int depth) {
+    // limit the depth of tree search
+    if (depth == MAX_DEPTH)
+        return FALSE;
+
     int candidates[4][MAP_DIMS];
 
     // get candidates
     getCandidates(candidates, goalRow, goalCol, prevGoalRow, prevGoalCol);
 
-    /*******
+    /*******/
     printf("current goal: (%d, %d), prevGoal: (%d, %d)\n", goalRow, goalCol, prevGoalRow, prevGoalCol);
     int i;
     for (i = 0; i < 4; i++) {
         printf("candidate %d: (%d, %d), ", i, candidates[i][ROW_CODE], candidates[i][COL_CODE]);
     }
+    printf("\ndepth = %d", depth);
     printf("\n\n");
 //    getchar();
     /*******/
@@ -523,7 +528,7 @@ int findSolution(unsigned int goalRow, unsigned int goalCol, unsigned int prevGo
                 }
 
                 // otherwise, solve a sub problem with the subGoal as the goal and the current goal as the prevGoal
-                int hasSolution = findSolution(cRow, cCol, goalRow, goalCol);
+                int hasSolution = findSolution(cRow, cCol, goalRow, goalCol, depth + 1);
 
                 if (hasSolution)
                     return TRUE;
@@ -560,11 +565,11 @@ int main()
     setDirection(&robotDir, NORTH);
 
     // set human position
-    setPos(humanPos, 2,5);
+    setPos(humanPos, 2,2);
     setVisited2(visited, humanPos);
 
     // set goal position
-    setPos(goalPos, 0, 0);
+    setPos(goalPos, 0,4);
 
     // initialize stacks
     stackInit(&rowStack);
@@ -617,7 +622,7 @@ int main()
     if (!isCornerPos(visited, humanPos[ROW_CODE], humanPos[COL_CODE])
         && hasPath(map, humanPos[ROW_CODE], humanPos[COL_CODE], goalPos[ROW_CODE], goalPos[COL_CODE], -1, -1)
         && hasPath(map, humanPos[ROW_CODE], humanPos[COL_CODE], startPos[ROW_CODE], startPos[COL_CODE], -1, -1)) {
-            hasSolution = findSolution(goalPos[ROW_CODE], goalPos[COL_CODE], goalPos[ROW_CODE], goalPos[COL_CODE]);
+            hasSolution = findSolution(goalPos[ROW_CODE], goalPos[COL_CODE], goalPos[ROW_CODE], goalPos[COL_CODE], 0);
     } else {
         hasSolution = FALSE;
     }
