@@ -1,7 +1,7 @@
 #include "Dictionary.h"
 
 void initDict(Dict * d) {
-    // TODO implement initDict
+    // implement initDict
     int i,j;
     for (i = 0; i < N_ROW; i++) {
         for (j = 0; j < N_COL; j++) {
@@ -11,7 +11,7 @@ void initDict(Dict * d) {
 }
 
 int hasKey(Dict d, unsigned int row, unsigned int col) {
-    // TODO implement initDict
+    // implement initDict
     if (row >= 0 && row < N_ROW && col >= 0 && col < N_COL && d.d[row][col] != -1)
         return TRUE;
     else
@@ -19,7 +19,7 @@ int hasKey(Dict d, unsigned int row, unsigned int col) {
 }
 
 void addKey(Dict * d, unsigned int row, unsigned int col, int newVal) {
-    // TODO implement initDict
+    // implement initDict
     if (row >= 0 && row < N_ROW && col >= 0 && col < N_COL)
         (*d).d[row][col] = newVal;
 }
@@ -34,7 +34,7 @@ int deleteKey(Dict * d, unsigned int row, unsigned int col) {
 }
 
 int getValue(Dict d, unsigned int row, unsigned int col) {
-    // TODO implement initDict
+    // implement initDict
     if (row >= 0 && row < N_ROW && col >= 0 && col < N_COL)
         return d.d[row][col];
 }

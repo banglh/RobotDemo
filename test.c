@@ -6,8 +6,9 @@
 #include "Direction.h"
 #include "Map.h"
 #include "VisitLog.h"
-#include "PriorityQueue.h"
-#include "Dictionary.h"
+//#include "PriorityQueue.h"
+//#include "Dictionary.h"
+#include "Path.h"
 
 // real map
 unsigned int rMap[N_ROW][N_COL][N_WALL];
@@ -376,18 +377,20 @@ void move() {
 
 int main()
 {
-    Dict dict;
-    initDict(&dict);
+    // initialize and build real map
+    mapInit(rMap);
+    buildRealMap();
 
-    addKey(&dict, 0, 1, 3);
-    addKey(&dict, 2, 33, 2);
-    addKey(&dict, 2, 0, 2);
-    addKey(&dict, 2, 3, 5);
+    // set human position
+    setPos(humanPos, 2, 5);
 
-    deleteKey(&dict, 0, 1);
-    deleteKey(&dict, 22, 22);
+    // check path
+    int t = hasPath(rMap, 0, 0, 3, 5, humanPos[ROW_CODE], humanPos[COL_CODE]);
+    if (t == TRUE)
+        printf("has path\n");
+    else
+        printf("no path\n");
 
-    printDict(dict);
 
     /******************* DEMO ***************************
 

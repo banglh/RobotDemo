@@ -12,6 +12,12 @@ int isValidPos2(unsigned int pos[MAP_DIMS]) {
     return TRUE;
 }
 
+int isSamePos(unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2) {
+    if (row1 != row2 || col1 != col2)
+        return FALSE;
+    return TRUE;
+}
+
 unsigned int getRow(unsigned int pos[MAP_DIMS]) {
     return pos[ROW_CODE];
 }

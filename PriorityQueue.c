@@ -1,12 +1,12 @@
 #include "PriorityQueue.h"
 
 void queueInit(PriorityQueue * pqueue) {
-    // TODO queueInit
+    // queueInit
     (*pqueue).qsize = 0;
 }
 
 QueueElement dequeue(PriorityQueue * pqueue) {
-    // TODO dequeue
+    // equeue
     // if the queue is empty, return an invalid element
     if (isEmptyQueue(*pqueue)) {
         QueueElement e;
@@ -36,7 +36,7 @@ QueueElement dequeue(PriorityQueue * pqueue) {
 }
 
 void enqueue(PriorityQueue * pqueue, QueueElement element) {
-    // TODO enqueue
+    // enqueue
     (*pqueue).q[(*pqueue).qsize] = element;
     (*pqueue).qsize++;
 }
