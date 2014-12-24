@@ -290,3 +290,59 @@ int setWallRight(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_
     }
     return TRUE;
 }
+
+int hasCorner(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row, unsigned int col) {
+    if (map[row][col][NORTH] == 1) {
+        if (map[row][col][EAST] == 1 || map[row][col][WEST] == 1)
+            return TRUE;
+    }
+    if (map[row][col][SOUTH] == 1) {
+        if (map[row][col][EAST] == 1 || map[row][col][WEST] == 1)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+int isCornerPos(unsigned int corner[N_ROW][N_COL], unsigned int row, unsigned int col) {
+    if (corner[row][col] == 1)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+void getCornersPos(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int corner[N_ROW][N_COL]) {
+    int i, j;
+    for (i = 0; i < ROW_CODE; i++) {
+        for (j = 0; j < COL_CODE; j++) {
+            if (hasCorner(map, i, j))
+                corner[i][j] = 1;
+            else
+                corner[i][j] = 0;
+        }
+    }
+}
+
+int isMovable(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int startRow, unsigned int startCol, unsigned int endRow, unsigned int endCol) {
+    if (startRow == endRow) {
+        if (startCol > endCol) {
+            // check east wall
+            if (map[startRow][startCol][EAST] == 0)
+                return TRUE;
+        } else {
+            // check west wall
+            if (map[startRow][startCol][WEST] == 0)
+                return TRUE;
+        }
+    } else if (startCol == endCol) {
+        if (startRow > endRow) {
+            // check south wall
+            if (map[startRow][startCol][SOUTH] == 0)
+                return TRUE;
+        } else {
+            // check north wall
+            if (map[startRow][startCol][NORTH] == 0)
+                return TRUE;
+        }
+    }
+    return FALSE;
+}

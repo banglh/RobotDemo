@@ -51,3 +51,7 @@ void printStack(struct stack st) {
         printf("%d | ", st.s[i]);
     printf("\n");
 }
+
+void resetStack(struct stack *st) {
+    (*st).top = -1;
+}

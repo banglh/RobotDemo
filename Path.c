@@ -11,7 +11,7 @@ int findPath(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int startRow, unsi
 }
 
 int hasPath(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int startRow, unsigned int startCol, unsigned int endRow, unsigned int endCol, unsigned int humanRow, unsigned int humanCol) {
-    // TODO implement hasPath
+    // implement hasPath
     PriorityQueue exploreQueue;
     Dict costDict;
 

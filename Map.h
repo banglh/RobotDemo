@@ -18,3 +18,9 @@ int setSouthWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_
 int setWallFront(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir);
 int setWallLeft(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir);
 int setWallRight(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir);
+
+int hasCorner(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row, unsigned int col);
+int isCornerPos(unsigned int corner[N_ROW][N_COL], unsigned int row, unsigned int col);
+void getCornersPos(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int corner[N_ROW][N_COL]);
+// function to check if robot can move person from start to goal
+int isMovable(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int startRow, unsigned int startCol, unsigned int endRow, unsigned int endCol);

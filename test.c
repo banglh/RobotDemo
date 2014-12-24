@@ -3,6 +3,7 @@
 #include "Demo.h"
 #include "Stack.h"
 #include "Position.h"
+#include "Action.h"
 #include "Direction.h"
 #include "Map.h"
 #include "VisitLog.h"
@@ -39,17 +40,14 @@ unsigned int robotDir;
 int stepN = 0;
 
 void buildRealMap() {
-    setWall(rMap, 1,0,2,0);
     setWall(rMap, 1,0,1,1);
-    setWall(rMap, 1,1,2,1);
-    setWall(rMap, 3,0,3,1);
+    setWall(rMap, 2,1,3,1);
     setWall(rMap, 0,2,0,3);
     setWall(rMap, 2,2,2,3);
     setWall(rMap, 3,2,3,3);
     setWall(rMap, 1,3,2,3);
-    setWall(rMap, 1,4,2,4);
-    setWall(rMap, 3,4,3,5);
-//    setWall(rMap, 1,2,1,3);
+    setWall(rMap, 0,4,0,5);
+    setWall(rMap, 0,5,1,5);
 }
 
 // check if a position is in stack or not
@@ -319,8 +317,8 @@ void getNextPos() {
 
     // test if one of the neighbours of current position is in stack
     int index = 1000;
-    unsigned int backRow = -1;
-    unsigned int backCol = -1;
+//    unsigned int backRow = -1;
+//    unsigned int backCol = -1;
     int i, r, c, sid;
     //// for each neighbour
     for (i = -2; i < 3; i++) {
@@ -375,25 +373,134 @@ void move() {
     robotPos[COL_CODE] = nextPos[COL_CODE];
 }
 
+// TODO function to check if a position can be a subGoal or not
+int isSubGoal(unsigned int checkRow, unsigned int checkCol, unsigned int curGoalRow, unsigned int curGoalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
+    /* criteria
+    1. neighbor of current goal
+    2. Not the final goal
+    3. Not at the corner
+    4. There is no wall between the subGoal and the position A (subGoal is between A and the goal)
+    5. After robot move the person from subGoal to the current goal, it can continue with the prevGoal (no need to check when goal == prevGoal == final goal)
+    6. When the goal is the same with the prevprevGoal, the subGoal can not be the prevGoal (to avoid infinitive function call)
+    */
+
+    // check if the candidate is the final goal
+    if (isSamePos(checkRow, checkCol, goalPos[ROW_CODE], goalPos[COL_CODE]))
+        return FALSE;
+
+    // check if the candidate is a corner position
+    if (isCornerPos(visited, checkRow, checkCol))
+        return FALSE;
+
+    // check if robot can move person from the candidate position to the current goal
+    if (!isMovable(map, checkRow, checkCol, curGoalRow, curGoalCol))
+        return FALSE;
+
+    // check criterion 5
+    if (!isSamePos(goalPos[ROW_CODE], goalPos[COL_CODE], prevGoalRow, prevGoalCol)) {
+        // check if there is a path from the candidate position to the position X from which robot move person from the current goal to the prevGoal
+        // given the human is at the current goal
+        unsigned int rowX = curGoalRow + curGoalRow - prevGoalRow;
+        unsigned int colX = curGoalCol + curGoalCol - prevGoalCol;
+        if (!hasPath(map, checkRow, checkCol, rowX, colX, curGoalRow, curGoalCol))
+            return FALSE;
+    }
+
+    // check criterion 6
+    // if there is prevprevGoal
+    if (rowStack.top >= 2) {
+        unsigned int ppRow = rowStack.s[rowStack.top - 2];
+        unsigned int ppCol = colStack.s[colStack.top - 2];
+        if (isSamePos(curGoalRow, curGoalCol, ppRow, ppCol)) {
+            if (isSamePos(checkRow, checkCol, prevGoalRow, prevGoalCol))
+                return FALSE;
+        }
+    }
+
+    // all the criteria is satisfied
+    return TRUE;
+}
+
+// TODO function to get subGoal candidates
+void getCandidates(int candidates[4][MAP_DIMS], unsigned int curGoalRow, unsigned int curGoalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
+    // first candidate
+    candidates[0][ROW_CODE] = curGoalRow + curGoalRow - prevGoalRow;
+    candidates[0][COL_CODE] = curGoalCol + curGoalCol - prevGoalCol;
+
+    if (curGoalRow == prevGoalRow) {
+        candidates[1][ROW_CODE] = curGoalRow - 1;
+        candidates[1][COL_CODE] = curGoalCol;
+
+        candidates[2][ROW_CODE] = curGoalRow + 1;
+        candidates[2][COL_CODE] = curGoalCol;
+    } else if (curGoalCol == prevGoalCol) {
+        candidates[1][ROW_CODE] = curGoalRow;
+        candidates[1][COL_CODE] = curGoalCol - 1;
+
+        candidates[2][ROW_CODE] = curGoalRow;
+        candidates[2][COL_CODE] = curGoalCol + 1;
+    }
+
+    // last candidate is prevGoal
+    candidates[3][ROW_CODE] = prevGoalRow;
+    candidates[3][COL_CODE] = prevGoalCol;
+}
+
+// TODO implement the function to find a solution for rescuing the person
+int findSolution(unsigned int goalRow, unsigned int goalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
+    int candidates[4][MAP_DIMS];
+
+    // get candidates
+    getCandidates(candidates, goalRow, goalCol, prevGoalRow, prevGoalCol);
+
+    // for each candidate
+    int c, cRow, cCol;
+    for (c = 0; c < 4; c++) {
+        cRow = candidates[c][ROW_CODE];
+        cCol = candidates[c][COL_CODE];
+        if (isValidPos(cRow, cCol)) {
+            if (isSubGoal(cRow, cCol, goalRow, goalCol, prevGoalRow, prevGoalCol)) {
+                // push subGoal to stack
+                push(&rowStack, cRow);
+                push(&colStack, cCol);
+
+                // check element problem (when the subGoal is the initial human position)
+                if (isSamePos(cRow, cCol, humanPos[ROW_CODE], humanPos[COL_CODE])) {
+                    int rowX = cRow + cRow - goalRow;
+                    int colX = cCol + cCol - goalCol;
+                    if (hasPath(map, startPos[ROW_CODE], startPos[COL_CODE], rowX, colX, cRow, cCol)) {
+                        // there is a solution
+                        return TRUE;
+                    } else {
+                        // solution invalid
+                        pop(&rowStack);
+                        pop(&colStack);
+                        return FALSE;
+                    }
+                }
+
+                // otherwise, solve a sub problem with the subGoal as the goal and the current goal as the prevGoal
+                int hasSolution = findSolution(cRow, cCol, goalRow, goalCol);
+
+                if (hasSolution)
+                    return TRUE;
+                else {
+                    pop(&rowStack);
+                    pop(&colStack);
+                    return FALSE;
+                }
+            }
+        }
+    }
+
+    return FALSE;
+}
+
 int main()
 {
-    // initialize and build real map
-    mapInit(rMap);
-    buildRealMap();
+    /******************* DEMO ***************************/
 
-    // set human position
-    setPos(humanPos, 2, 5);
-
-    // check path
-    int t = hasPath(rMap, 0, 0, 3, 5, humanPos[ROW_CODE], humanPos[COL_CODE]);
-    if (t == TRUE)
-        printf("has path\n");
-    else
-        printf("no path\n");
-
-
-    /******************* DEMO ***************************
-
+    /********** Phase 1: Get map information ***********/
     // initialize and build real map
     mapInit(rMap);
     buildRealMap();
@@ -405,13 +512,16 @@ int main()
     visitLogInit(visited);
 
     // set robot position and direction
-    setPos(startPos, 0, 2);
-    setPos(robotPos, 0, 2);
+    setPos(startPos, 3, 0);
+    setPos(robotPos, 3, 0);
     setDirection(&robotDir, NORTH);
 
     // set human position
-    setPos(humanPos, 1, 4);
+    setPos(humanPos, 2, 2);
     setVisited2(visited, humanPos);
+
+    // set goal position
+    setPos(goalPos, 3, 0);
 
     // initialize stacks
     stackInit(&rowStack);
@@ -441,28 +551,33 @@ int main()
         }
         else
             break;
-        getchar();
+//        getchar();
     }
 
     printf("Real map: \n");
     printMap(rMap);
     printf("Explored map: \n");
     printMap(map);
-
+    printf("End of phase 1\n\n");
+    getchar();
+    /********** Phase 2: Plan to rescue ***********/
     // TODO mark the corner positions in the visited array
+    getCornersPos(map, visited);
 
     // TODO reset stacks to reuse them as the solution stacks
+    resetStack(&rowStack);
+    resetStack(&colStack);
 
     // TODO call function to find the path to move the person to the final goal
+    int hasSolution = findSolution(goalPos[ROW_CODE], goalPos[COL_CODE], goalPos[ROW_CODE], goalPos[COL_CODE]);
 
+    if (hasSolution) {
+        printStack(rowStack);
+        printStack(colStack);
+    } else {
+        printf("There is no solution\n");
+    }
     /*********************************************************/
+
     return 0;
-}
-
-// TODO implement the function to find a solution for rescuing the person
-int findSolution(unsigned int goalRow, unsigned int goalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
-    // TODO get subGoals and for each subGoal
-    // ...
-
-    return FALSE;
 }
