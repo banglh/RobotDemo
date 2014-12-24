@@ -381,7 +381,7 @@ int isSubGoal(unsigned int checkRow, unsigned int checkCol, unsigned int curGoal
     3. Not at the corner
     4. There is no wall between the subGoal and the position A (subGoal is between A and the goal)
     5. After robot move the person from subGoal to the current goal, it can continue with the prevGoal (no need to check when goal == prevGoal == final goal)
-    6. When the goal is the same with the prevprevGoal, the subGoal can not be the prevGoal (to avoid infinitive function call)
+    6. Assume subGoal == prevGoal, if robot still can move person from subGoal back to current goal after move it from current goal to subGoal  invalid subGoal
     */
 
     // check if the candidate is the final goal
@@ -411,14 +411,12 @@ int isSubGoal(unsigned int checkRow, unsigned int checkCol, unsigned int curGoal
     }
 
     // check criterion 6
-    // if there is prevprevGoal
-    if (rowStack.top >= 2) {
-        unsigned int ppRow = rowStack.s[rowStack.top - 2];
-        unsigned int ppCol = colStack.s[colStack.top - 2];
-        if (isSamePos(curGoalRow, curGoalCol, ppRow, ppCol)) {
-            if (isSamePos(checkRow, checkCol, prevGoalRow, prevGoalCol))
-                return FALSE;
-        }
+    if (isSamePos(checkRow, checkCol, prevGoalRow, prevGoalCol)) {
+        // check if there is a path from current goal to the position from which robot move person given person position is at subGoal
+        unsigned int xRow = checkRow + checkRow - curGoalRow;
+        unsigned int xCol = checkCol + checkCol - curGoalCol;
+        if (hasPath(map, curGoalRow, curGoalCol, xRow, xCol, checkRow, checkCol))
+            return FALSE;
     }
 
     // all the criteria is satisfied
@@ -587,14 +585,11 @@ int main()
     printf("Explored map: \n");
     printMap(map);
     printf("End of phase 1\n\n");
-    getchar();
+//    getchar();
+
     /********** Phase 2: Plan to rescue ***********/
     // TODO mark the corner positions in the visited array
-
     getCornersPos(map, visited);
-
-    printVisitLog(visited);
-    getchar();
 
     // TODO reset stacks to reuse them as the solution stacks
     resetStack(&rowStack);
