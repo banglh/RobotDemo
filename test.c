@@ -40,14 +40,14 @@ unsigned int robotDir;
 int stepN = 0;
 
 void buildRealMap() {
-    setWall(rMap, 1,0,1,1);
-    setWall(rMap, 2,1,3,1);
-    setWall(rMap, 0,2,0,3);
-    setWall(rMap, 2,2,2,3);
-    setWall(rMap, 3,2,3,3);
-    setWall(rMap, 1,3,2,3);
-    setWall(rMap, 0,4,0,5);
-    setWall(rMap, 0,5,1,5);
+//    setWall(rMap, 1,0,1,1);
+//    setWall(rMap, 2,1,3,1);
+//    setWall(rMap, 0,2,0,3);
+//    setWall(rMap, 2,2,2,3);
+//    setWall(rMap, 3,2,3,3);
+//    setWall(rMap, 1,3,2,3);
+//    setWall(rMap, 0,4,0,5);
+//    setWall(rMap, 0,5,1,5);
 }
 
 // check if a position is in stack or not
@@ -373,7 +373,7 @@ void move() {
     robotPos[COL_CODE] = nextPos[COL_CODE];
 }
 
-// TODO function to check if a position can be a subGoal or not
+// function to check if a position can be a subGoal or not
 int isSubGoal(unsigned int checkRow, unsigned int checkCol, unsigned int curGoalRow, unsigned int curGoalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
     /* criteria
     1. neighbor of current goal
@@ -423,7 +423,7 @@ int isSubGoal(unsigned int checkRow, unsigned int checkCol, unsigned int curGoal
     return TRUE;
 }
 
-// TODO function to get subGoal candidates
+// function to get subGoal candidates
 void getCandidates(int candidates[4][MAP_DIMS], unsigned int curGoalRow, unsigned int curGoalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
 
     if (isSamePos(curGoalRow, curGoalCol, prevGoalRow, prevGoalCol)) {
@@ -462,7 +462,7 @@ void getCandidates(int candidates[4][MAP_DIMS], unsigned int curGoalRow, unsigne
     }
 }
 
-// TODO implement the function to find a solution for rescuing the person
+// implement the function to find a solution for rescuing the person
 int findSolution(unsigned int goalRow, unsigned int goalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
     int candidates[4][MAP_DIMS];
 
@@ -588,14 +588,14 @@ int main()
 //    getchar();
 
     /********** Phase 2: Plan to rescue ***********/
-    // TODO mark the corner positions in the visited array
+    // mark the corner positions in the visited array
     getCornersPos(map, visited);
 
-    // TODO reset stacks to reuse them as the solution stacks
+    // reset stacks to reuse them as the solution stacks
     resetStack(&rowStack);
     resetStack(&colStack);
 
-    // TODO call function to find the path to move the person to the final goal
+    // call function to find the path to move the person to the final goal
     int hasSolution = findSolution(goalPos[ROW_CODE], goalPos[COL_CODE], goalPos[ROW_CODE], goalPos[COL_CODE]);
 
     if (hasSolution) {
