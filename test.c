@@ -388,6 +388,10 @@ int isSubGoal(unsigned int checkRow, unsigned int checkCol, unsigned int curGoal
     if (isSamePos(checkRow, checkCol, goalPos[ROW_CODE], goalPos[COL_CODE]))
         return FALSE;
 
+    // check if there is wall between current goal and the candidate position
+    if (checkWall(map, checkRow, checkCol, curGoalRow, curGoalCol))
+        return FALSE;
+
     // check if the candidate is a corner position
     if (isCornerPos(visited, checkRow, checkCol))
         return FALSE;
