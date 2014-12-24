@@ -312,8 +312,8 @@ int isCornerPos(unsigned int corner[N_ROW][N_COL], unsigned int row, unsigned in
 
 void getCornersPos(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int corner[N_ROW][N_COL]) {
     int i, j;
-    for (i = 0; i < ROW_CODE; i++) {
-        for (j = 0; j < COL_CODE; j++) {
+    for (i = 0; i < N_ROW; i++) {
+        for (j = 0; j < N_COL; j++) {
             if (hasCorner(map, i, j))
                 corner[i][j] = 1;
             else

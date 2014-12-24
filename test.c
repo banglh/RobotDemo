@@ -423,27 +423,41 @@ int isSubGoal(unsigned int checkRow, unsigned int checkCol, unsigned int curGoal
 
 // TODO function to get subGoal candidates
 void getCandidates(int candidates[4][MAP_DIMS], unsigned int curGoalRow, unsigned int curGoalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
-    // first candidate
-    candidates[0][ROW_CODE] = curGoalRow + curGoalRow - prevGoalRow;
-    candidates[0][COL_CODE] = curGoalCol + curGoalCol - prevGoalCol;
 
-    if (curGoalRow == prevGoalRow) {
-        candidates[1][ROW_CODE] = curGoalRow - 1;
-        candidates[1][COL_CODE] = curGoalCol;
-
-        candidates[2][ROW_CODE] = curGoalRow + 1;
-        candidates[2][COL_CODE] = curGoalCol;
-    } else if (curGoalCol == prevGoalCol) {
-        candidates[1][ROW_CODE] = curGoalRow;
-        candidates[1][COL_CODE] = curGoalCol - 1;
-
-        candidates[2][ROW_CODE] = curGoalRow;
-        candidates[2][COL_CODE] = curGoalCol + 1;
+    if (isSamePos(curGoalRow, curGoalCol, prevGoalRow, prevGoalCol)) {
+        int j = 0;
+        int i;
+        for (i = -2; i < 3; i++) {
+            if (i != 0) {
+                candidates[j][ROW_CODE] = curGoalRow + i/2;
+                candidates[j][COL_CODE] = curGoalCol + i%2;
+                j++;
+            }
+        }
     }
+    else {
+        // first candidate
+        candidates[0][ROW_CODE] = curGoalRow + curGoalRow - prevGoalRow;
+        candidates[0][COL_CODE] = curGoalCol + curGoalCol - prevGoalCol;
 
-    // last candidate is prevGoal
-    candidates[3][ROW_CODE] = prevGoalRow;
-    candidates[3][COL_CODE] = prevGoalCol;
+        if (curGoalRow == prevGoalRow) {
+            candidates[1][ROW_CODE] = curGoalRow - 1;
+            candidates[1][COL_CODE] = curGoalCol;
+
+            candidates[2][ROW_CODE] = curGoalRow + 1;
+            candidates[2][COL_CODE] = curGoalCol;
+        } else if (curGoalCol == prevGoalCol) {
+            candidates[1][ROW_CODE] = curGoalRow;
+            candidates[1][COL_CODE] = curGoalCol - 1;
+
+            candidates[2][ROW_CODE] = curGoalRow;
+            candidates[2][COL_CODE] = curGoalCol + 1;
+        }
+
+        // last candidate is prevGoal
+        candidates[3][ROW_CODE] = prevGoalRow;
+        candidates[3][COL_CODE] = prevGoalCol;
+    }
 }
 
 // TODO implement the function to find a solution for rescuing the person
@@ -452,6 +466,16 @@ int findSolution(unsigned int goalRow, unsigned int goalCol, unsigned int prevGo
 
     // get candidates
     getCandidates(candidates, goalRow, goalCol, prevGoalRow, prevGoalCol);
+
+    /*******/
+    printf("current goal: (%d, %d), prevGoal: (%d, %d)\n", goalRow, goalCol, prevGoalRow, prevGoalCol);
+    int i;
+    for (i = 0; i < 4; i++) {
+        printf("candidate %d: (%d, %d), ", i, candidates[i][ROW_CODE], candidates[i][COL_CODE]);
+    }
+    printf("\n\n");
+//    getchar();
+    /*******/
 
     // for each candidate
     int c, cRow, cCol;
@@ -487,7 +511,7 @@ int findSolution(unsigned int goalRow, unsigned int goalCol, unsigned int prevGo
                 else {
                     pop(&rowStack);
                     pop(&colStack);
-                    return FALSE;
+                    continue;
                 }
             }
         }
@@ -562,7 +586,11 @@ int main()
     getchar();
     /********** Phase 2: Plan to rescue ***********/
     // TODO mark the corner positions in the visited array
+
     getCornersPos(map, visited);
+
+    printVisitLog(visited);
+    getchar();
 
     // TODO reset stacks to reuse them as the solution stacks
     resetStack(&rowStack);
