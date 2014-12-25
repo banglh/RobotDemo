@@ -61,3 +61,22 @@ void printStack(Stack st) {
 void resetStack(Stack *st) {
     (*st).top = -1;
 }
+
+int isInStack(Stack st, unsigned int row, unsigned int col) {
+    // isInStack
+    int i;
+    for (i = st.top; i > -1; i--) {
+        if (st.s[i].row == row && st.s[i].col == col)
+            return i;
+    }
+    return -1;
+}
+
+int isInStack2(Stack st, Position pos) {
+    int i;
+    for (i = st.top; i > -1; i--) {
+        if (isSamePos2(pos, st.s[i]))
+            return i;
+    }
+    return -1;
+}

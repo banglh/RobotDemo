@@ -21,56 +21,15 @@ unsigned int visited[N_ROW][N_COL];
 unsigned int sensors[N_SENSORS];
 
 // position of the robot
-//unsigned int startPos[MAP_DIMS];
-//unsigned int robotPos[MAP_DIMS];
-//unsigned int nextPos[MAP_DIMS];
 Position startPos, robotPos, nextPos, humanPos, goalPos;
 
 // stacks
-//struct stack rowStack;
-//struct stack colStack;
 Stack posStack;
-
-// position of the person
-//unsigned int humanPos[MAP_DIMS];
-// position of the goal
-//unsigned int goalPos[MAP_DIMS];
 
 // robot direction
 unsigned int robotDir;
 
 int stepN = 0;
-
-void buildRealMap() {
-    setWall(rMap, 1,0,1,1);
-    setWall(rMap, 2,1,3,1);
-    setWall(rMap, 0,2,0,3);
-    setWall(rMap, 2,2,2,3);
-    setWall(rMap, 3,2,3,3);
-    setWall(rMap, 1,3,2,3);
-    setWall(rMap, 0,4,0,5);
-    setWall(rMap, 0,5,1,5);
-}
-
-// check if a position is in stack or not
-int isInStack(unsigned int row, unsigned int col) {
-    // isInStack
-    int i;
-    for (i = posStack.top; i > -1; i--) {
-        if (posStack.s[i].row == row && posStack.s[i].col == col)
-            return i;
-    }
-    return -1;
-}
-
-int isInStack2(Position pos) {
-    int i;
-    for (i = posStack.top; i > -1; i--) {
-        if (isSamePos2(pos, posStack.s[i]))
-            return i;
-    }
-    return -1;
-}
 
 // find the deepest position in the stack which has unvisited neighbour
 int getDeepestPos() {
@@ -294,7 +253,7 @@ void getNextPos() {
             c = robotPos.col + i%2;
             if (r != prevPos.row || c != prevPos.col) {
                 if (isValidPos(r, c) && !checkWall(map, r, c, robotPos.row, robotPos.col)) {
-                    sid = isInStack(r, c);
+                    sid = isInStack(posStack, r, c);
                     if (sid > -1 && sid >= deepestIndex && sid < index) {
                         index = sid;
                     }
@@ -327,14 +286,6 @@ int step() {
     int action = getAction(robotPos, nextPos, robotDir);
 
     return action;
-}
-
-void move() {
-    // update robot direction
-    robotDir = getNewDirection(robotPos, nextPos);
-
-    // update robot position
-    robotPos = nextPos;
 }
 
 // function to check if a position can be a subGoal or not
@@ -443,7 +394,6 @@ void getCandidates(int candidates[4][MAP_DIMS], unsigned int curGoalRow, unsigne
 }
 
 // implement the function to find a solution for rescuing the person
-// [Bug fixed] infinitive function call when there is no solution
 int findSolution(unsigned int goalRow, unsigned int goalCol, unsigned int prevGoalRow, unsigned int prevGoalCol, int depth) {
     // limit the depth of tree search
     if (depth == MAX_DEPTH)
@@ -513,7 +463,7 @@ int main()
     printf("Start phase 1\n");
     // initialize and build real map
     mapInit(rMap);
-    buildRealMap();
+    buildRealMap(rMap);
 
     // initialize map
     mapInit(map);
@@ -554,7 +504,7 @@ int main()
         printf("\n");
 
         if (isValidPos2(nextPos)) {
-            move();
+            move(&robotPos, &nextPos, &robotDir);
         }
         else
             break;
