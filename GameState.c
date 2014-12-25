@@ -17,3 +17,7 @@ int isSameGameState(GameState gs1, GameState gs2) {
         return TRUE;
     return FALSE;
 }
+
+void printGameState(GameState gs) {
+    printf("(%d, %d) - (%d, %d)", gs.rbPos.row, gs.rbPos.col, gs.hmPos.row, gs.hmPos.col);
+}

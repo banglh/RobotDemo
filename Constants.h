@@ -36,4 +36,5 @@
 
 #define MAX_DEPTH 30
 
-
+#define GAME_QUEUE_SIZE 100
+#define GAME_DICT_SIZE 100

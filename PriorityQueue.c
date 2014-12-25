@@ -9,8 +9,8 @@ QueueElement dequeue(PriorityQueue * pqueue) {
     // if the queue is empty, return an invalid element
     if (isEmptyQueue(*pqueue)) {
         QueueElement e;
-        e.pos.row = -1;
-        e.pos.col = -1;
+        e.pos.row = N_ROW;
+        e.pos.col = N_COL;
         return e;
     }
 
