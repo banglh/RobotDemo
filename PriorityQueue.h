@@ -1,9 +1,12 @@
+#ifndef __PRIORITY_QUEUE_H
+#define __PRIORITY_QUEUE_H
+
 #include <stdio.h>
 #include "Constants.h"
+#include "Position.h"
 
 typedef struct {
-    unsigned int row;
-    unsigned int col;
+    Position pos;
     unsigned int priority;
 } QueueElement;
 
@@ -20,4 +23,7 @@ int isEmptyQueue(PriorityQueue pqueue);
 void printQueue(PriorityQueue pqueue);
 
 QueueElement newQueueElement(unsigned int row, unsigned int col, unsigned int priority);
+QueueElement newQueueElement2(Position pos, unsigned int priority);
 void setQueueElement(QueueElement *qe, unsigned int row, unsigned int col, unsigned int priority);
+
+#endif // __PRIORITY_QUEUE_H

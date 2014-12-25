@@ -1,5 +1,12 @@
 #include "Position.h"
 
+Position newPosition(unsigned int row, unsigned int col) {
+    Position pos;
+    pos.row = row;
+    pos.col = col;
+    return pos;
+}
+
 int isValidPos(unsigned int row, unsigned int col) {
     if (row < 0 || row >= N_ROW || col < 0 || col >= N_COL)
         return FALSE;

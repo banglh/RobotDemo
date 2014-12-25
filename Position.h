@@ -10,6 +10,7 @@ typedef struct {
     unsigned int col;
 } Position;
 
+Position newPosition(unsigned int row, unsigned int col);
 int isValidPos(unsigned int row, unsigned int col);
 int isValidPos2(Position pos);
 int isSamePos(unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2);

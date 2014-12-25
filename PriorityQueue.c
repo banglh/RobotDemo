@@ -6,12 +6,11 @@ void queueInit(PriorityQueue * pqueue) {
 }
 
 QueueElement dequeue(PriorityQueue * pqueue) {
-    // equeue
     // if the queue is empty, return an invalid element
     if (isEmptyQueue(*pqueue)) {
         QueueElement e;
-        e.row = -1;
-        e.col = -1;
+        e.pos.row = -1;
+        e.pos.col = -1;
         return e;
     }
 
@@ -50,23 +49,31 @@ int isEmptyQueue(PriorityQueue pqueue) {
 
 void printQueue(PriorityQueue pqueue) {
     int i;
-    printf("\n%-5s | %-5s | %-s\n", "row", "col", "priority");
+    printf("\n%-5s | %-s\n", "position", "priority");
     for (i = 0; i < pqueue.qsize; i++) {
-        printf("%-5d | %-5d | %-d\n", pqueue.q[i].row, pqueue.q[i].col, pqueue.q[i].priority);
+        printPos(pqueue.q[i].pos);
+        printf(" | %-d\n", pqueue.q[i].priority);
     }
     printf("\n");
 }
 
 QueueElement newQueueElement(unsigned int row, unsigned int col, unsigned int priority) {
     QueueElement e;
-    e.row = row;
-    e.col = col;
+    e.pos.row = row;
+    e.pos.col = col;
+    e.priority = priority;
+    return e;
+}
+
+QueueElement newQueueElement2(Position pos, unsigned int priority) {
+    QueueElement e;
+    e.pos = pos;
     e.priority = priority;
     return e;
 }
 
 void setQueueElement(QueueElement *qe, unsigned int row, unsigned int col, unsigned int priority) {
-    (*qe).row = row;
-    (*qe).col = col;
+    (*qe).pos.row = row;
+    (*qe).pos.col = col;
     (*qe).priority = priority;
 }

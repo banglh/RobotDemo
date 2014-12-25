@@ -152,6 +152,35 @@ int checkWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row1, unsigne
     }
 }
 
+int checkWall2(unsigned int map[N_ROW][N_COL][N_WALL], Position pos1, Position pos2) {
+    if (isNeighbour2(pos1, pos2)) {
+        if (pos1.row == pos2.row) {
+            if (pos1.col > pos2.col) {
+                // check WEST bit of pos1 or EAST bit of pos2
+                if (map[pos1.row][pos1.col][WEST])
+                    return TRUE;
+            } else {
+                // check EAST bit of pos1 or WEST bit of pos2
+                if (map[pos1.row][pos1.col][EAST])
+                    return TRUE;
+            }
+        } else if (pos1.col == pos2.col) {
+            if (pos1.row > pos2.row) {
+                // check NORTH bit of pos1 or SOUTH bit of pos2
+                if (map[pos1.row][pos1.col][NORTH])
+                    return TRUE;
+            } else {
+                // check SOUTH bit of pos1 or NORTH bit of pos2
+                if (map[pos1.row][pos1.col][SOUTH])
+                    return TRUE;
+            }
+        }
+        return FALSE;
+    } else {
+        return FALSE;
+    }
+}
+
 void getWallInfo(unsigned int sensors[N_SENSORS], unsigned int map[N_ROW][N_COL][N_WALL], Position rbPos, unsigned int rbDir) {
     switch (rbDir) {
     case NORTH:
@@ -304,6 +333,13 @@ int hasCorner(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row, unsigned
 
 int isCornerPos(unsigned int corner[N_ROW][N_COL], unsigned int row, unsigned int col) {
     if (corner[row][col] == 1)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+int isCornerPos2(unsigned int corner[N_ROW][N_COL], Position pos) {
+    if (corner[pos.row][pos.col] == 1)
         return TRUE;
     else
         return FALSE;
