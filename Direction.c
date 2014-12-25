@@ -75,14 +75,14 @@ int turn180(unsigned int rbDir) {
     }
 }
 
-int getNewDirection(unsigned int oldPos[MAP_DIMS], unsigned int newPos[MAP_DIMS]) {
-    if (oldPos[ROW_CODE] == newPos[ROW_CODE]) {
-        if (oldPos[COL_CODE] > newPos[COL_CODE])
+int getNewDirection(Position oldPos, Position newPos) {
+    if (oldPos.row == newPos.row) {
+        if (oldPos.col > newPos.col)
             return WEST;
         else
             return EAST;
-    } else if (oldPos[COL_CODE] == newPos[COL_CODE]) {
-        if (oldPos[ROW_CODE] > newPos[ROW_CODE])
+    } else if (oldPos.col == newPos.col) {
+        if (oldPos.row > newPos.row)
             return NORTH;
         else
             return SOUTH;

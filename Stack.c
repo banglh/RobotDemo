@@ -1,24 +1,24 @@
 #include "Stack.h"
 
-void stackInit(struct stack * st) {
+void stackInit(Stack * st) {
     (*st).top = -1;
 }
 
-void push(struct stack * st, unsigned int item) {
+void push(Stack * st, Position item) {
     (*st).top++;
     (*st).s[(*st).top] = item;
 }
 
-unsigned int pop(struct stack * st) {
-    unsigned int item;
+Position pop(Stack * st) {
+    Position item;
     item = (*st).s[(*st).top];
     (*st).top--;
     return item;
 }
 
-unsigned int popToIndex(struct stack * st, int index) {
+Position popToIndex(Stack * st, int index) {
     // popToIndex
-    unsigned int item;
+    Position item;
     if (index >= (*st).top) {
         item = (*st).s[(*st).top];
     } else if (index > -1) {
@@ -31,27 +31,33 @@ unsigned int popToIndex(struct stack * st, int index) {
     return item;
 }
 
-unsigned int head(struct stack st) {
+Position head(Stack st) {
     if (isEmptyStack(st) == FALSE)
         return st.s[st.top];
-    else
-        return -1;
+    else {
+        Position pos;
+        setPos(&pos, -1, -1);
+        return pos;
+    }
 }
 
-int isEmptyStack(struct stack st) {
+int isEmptyStack(Stack st) {
     if (st.top == -1)
         return TRUE;
     else
         return FALSE;
 }
 
-void printStack(struct stack st) {
+void printStack(Stack st) {
     int i;
-    for (i = 0; i <= st.top; i++)
-        printf("%d | ", st.s[i]);
+    printf("\n");
+    for (i = st.top; i >= 0; i--) {
+        printPos(st.s[i]);
+        printf("\n");
+    }
     printf("\n");
 }
 
-void resetStack(struct stack *st) {
+void resetStack(Stack *st) {
     (*st).top = -1;
 }

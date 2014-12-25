@@ -1,10 +1,16 @@
+#ifndef __ACTION_H
+#define __ACTION_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "Constants.h"
+#include "Position.h"
 
-int getAction(unsigned int curpos[MAP_DIMS], unsigned int nextpos[MAP_DIMS], unsigned int curDir);
-int getActionNorth(unsigned int curpos[MAP_DIMS], unsigned int nextpos[MAP_DIMS]);
-int getActionEast(unsigned int curpos[MAP_DIMS], unsigned int nextpos[MAP_DIMS]);
-int getActionWest(unsigned int curpos[MAP_DIMS], unsigned int nextpos[MAP_DIMS]);
-int getActionSouth(unsigned int curpos[MAP_DIMS], unsigned int nextpos[MAP_DIMS]);
+int getAction(Position curpos, Position nextpos, unsigned int curDir);
+int getActionNorth(Position curpos, Position nextpos);
+int getActionEast(Position curpos, Position nextpos);
+int getActionWest(Position curpos, Position nextpos);
+int getActionSouth(Position curpos, Position nextpos);
 void printAction(int action);
+
+#endif // __ACTION_H

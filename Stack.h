@@ -1,16 +1,22 @@
+#ifndef __STACK_H
+#define __STACK_H
+
 #include <stdio.h>
 #include "Constants.h"
+#include "Position.h"
 
-struct stack {
-    unsigned int s[STACK_SIZE];
+typedef struct {
+    Position s[STACK_SIZE];
     int top;
-};
+} Stack;
 
-void stackInit(struct stack * st);
-void push(struct stack * st, unsigned int item);
-unsigned int pop(struct stack * st);
-unsigned int popToIndex(struct stack * st, int index);
-unsigned int head(struct stack st);
-int isEmptyStack(struct stack st);
-void printStack(struct stack st);
-void resetStack(struct stack *st);
+void stackInit(Stack * st);
+void push(Stack * st, Position item);
+Position pop(Stack * st);
+Position popToIndex(Stack * st, int index);
+Position head(Stack st);
+int isEmptyStack(Stack st);
+void printStack(Stack st);
+void resetStack(Stack *st);
+
+#endif

@@ -6,8 +6,8 @@ int isValidPos(unsigned int row, unsigned int col) {
     return TRUE;
 }
 
-int isValidPos2(unsigned int pos[MAP_DIMS]) {
-    if (pos[ROW_CODE] < 0 || pos[ROW_CODE] >= N_ROW || pos[COL_CODE] < 0 || pos[COL_CODE] >= N_COL)
+int isValidPos2(Position pos) {
+    if (pos.row < 0 || pos.row >= N_ROW || pos.col < 0 || pos.col >= N_COL)
         return FALSE;
     return TRUE;
 }
@@ -18,43 +18,50 @@ int isSamePos(unsigned int row1, unsigned int col1, unsigned int row2, unsigned 
     return TRUE;
 }
 
-unsigned int getRow(unsigned int pos[MAP_DIMS]) {
-    return pos[ROW_CODE];
-}
-
-unsigned int getCol(unsigned int pos[MAP_DIMS]) {
-    return pos[COL_CODE];
-}
-
-int setRow(unsigned int pos[MAP_DIMS], unsigned int newRow) {
-    // check if the new row is valid or not
-    if (newRow < 0 || newRow >= N_ROW)
+int isSamePos2(Position pos1, Position pos2) {
+    if (pos1.row != pos2.row || pos1.col != pos2.col)
         return FALSE;
     else
-        pos[ROW_CODE] = newRow;
+        return TRUE;
+}
+
+unsigned int getRow(Position pos) {
+    return pos.row;
+}
+
+unsigned int getCol(Position pos) {
+    return pos.col;
+}
+
+int setRow(Position * pos, unsigned int newRow) {
+    if (newRow < 0 || newRow >= N_ROW)
+        return FALSE;
+
+    (*pos).row = newRow;
+    return TRUE;
+}
+
+int setCol(Position * pos, unsigned int newCol) {
+    if (newCol < 0 || newCol >= N_COL)
+        return FALSE;
+
+    (*pos).col = newCol;
+    return TRUE;
+}
+
+int setPos(Position * pos, unsigned int newRow, unsigned int newCol) {
+    if (newRow < 0 || newRow >= N_ROW)
+        return FALSE;
+
+    if (newCol < 0 || newCol >= N_COL)
+        return FALSE;
+
+    (*pos).row = newRow;
+    (*pos).col = newCol;
 
     return TRUE;
 }
 
-int setCol(unsigned int pos[MAP_DIMS], unsigned int newCol) {
-    // check if the new column is valid or not
-    if (newCol < 0 || newCol >= N_COL)
-        return FALSE;
-    else
-        pos[COL_CODE] = newCol;
-
-    return TRUE;
-}
-
-int setPos(unsigned int pos[MAP_DIMS], unsigned int newRow, unsigned int newCol) {
-    // check if the new row is valid or not
-    if (newRow < 0 || newRow >= N_ROW)
-        return FALSE;
-    // check if the new column is valid or not
-    if (newCol < 0 || newCol >= N_COL)
-        return FALSE;
-
-    // if new row and column are valid
-    pos[ROW_CODE] = newRow;
-    pos[COL_CODE] = newCol;
+void printPos(Position pos) {
+    printf("(%d, %d)", pos.row, pos.col);
 }

@@ -57,11 +57,11 @@ int isNeighbour(unsigned int row1, unsigned int col1, unsigned int row2, unsigne
     return FALSE;
 }
 
-int isNeighbour2(unsigned int pos1[MAP_DIMS], unsigned int pos2[MAP_DIMS]) {
+int isNeighbour2(Position pos1, Position pos2) {
     if (isValidPos2(pos1) && isValidPos2(pos2)) {
-        if (pos1[ROW_CODE] == pos2[ROW_CODE] && abs(pos2[COL_CODE] - pos1[COL_CODE]) == 1)
+        if (pos1.row == pos2.row && abs(pos2.col - pos1.col) == 1)
             return TRUE;
-        if (pos1[COL_CODE] == pos2[COL_CODE] && abs(pos1[ROW_CODE] - pos2[ROW_CODE]) == 1)
+        if (pos1.col == pos2.col && abs(pos1.row - pos2.row) == 1)
             return TRUE;
     }
     return FALSE;
@@ -95,27 +95,27 @@ int setWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row1, unsigned 
     return FALSE;
 }
 
-int setWall2(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int pos1[MAP_DIMS], unsigned int pos2[MAP_DIMS]) {
+int setWall2(unsigned int map[N_ROW][N_COL][N_WALL], Position pos1, Position pos2) {
     if (isNeighbour2(pos1, pos2)) {
-        if (pos1[ROW_CODE] == pos2[ROW_CODE]) {
-            if (pos1[COL_CODE] > pos2[COL_CODE]) {
+        if (pos1.row == pos2.row) {
+            if (pos1.col > pos2.col) {
                 // wall position: pos2's EAST and pos1's WEST
-                map[pos1[ROW_CODE]][pos1[COL_CODE]][WEST] += 1;
-                map[pos2[ROW_CODE]][pos2[COL_CODE]][EAST] += 1;
+                map[pos1.row][pos1.col][WEST] += 1;
+                map[pos2.row][pos2.col][EAST] += 1;
             } else {
                 // wall position: pos1's EAST and pos2's WEST
-                map[pos1[ROW_CODE]][pos1[COL_CODE]][EAST] += 1;
-                map[pos2[ROW_CODE]][pos2[COL_CODE]][WEST] += 1;
+                map[pos1.row][pos1.col][EAST] += 1;
+                map[pos2.row][pos2.col][WEST] += 1;
             }
-        } else if (pos1[COL_CODE] == pos2[COL_CODE]) {
-            if (pos1[ROW_CODE] > pos2[ROW_CODE]) {
+        } else if (pos1.col == pos2.col) {
+            if (pos1.row > pos2.row) {
                 // wall position: pos2's SOUTH and pos1's NORTH
-                map[pos1[ROW_CODE]][pos1[COL_CODE]][NORTH] = 1;
-                map[pos2[ROW_CODE]][pos2[COL_CODE]][SOUTH] = 1;
+                map[pos1.row][pos1.col][NORTH] = 1;
+                map[pos2.row][pos2.col][SOUTH] = 1;
             } else {
                 // wall position: pos2's NORTH and pos1's SOUTH
-                map[pos1[ROW_CODE]][pos1[COL_CODE]][SOUTH] = 1;
-                map[pos2[ROW_CODE]][pos2[COL_CODE]][NORTH] = 1;
+                map[pos1.row][pos1.col][SOUTH] = 1;
+                map[pos2.row][pos2.col][NORTH] = 1;
             }
         }
         return TRUE;
@@ -152,32 +152,32 @@ int checkWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row1, unsigne
     }
 }
 
-void getWallInfo(unsigned int wallinfo[N_SENSORS], unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir) {
+void getWallInfo(unsigned int sensors[N_SENSORS], unsigned int map[N_ROW][N_COL][N_WALL], Position rbPos, unsigned int rbDir) {
     switch (rbDir) {
     case NORTH:
-        wallinfo[FRONT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][NORTH];
-        wallinfo[LEFT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][WEST];
-        wallinfo[RIGHT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][EAST];
+        sensors[FRONT] = map[rbPos.row][rbPos.col][NORTH];
+        sensors[LEFT] = map[rbPos.row][rbPos.col][WEST];
+        sensors[RIGHT] = map[rbPos.row][rbPos.col][EAST];
         break;
     case EAST:
-        wallinfo[FRONT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][EAST];
-        wallinfo[LEFT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][NORTH];
-        wallinfo[RIGHT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][SOUTH];
+        sensors[FRONT] = map[rbPos.row][rbPos.col][EAST];
+        sensors[LEFT] = map[rbPos.row][rbPos.col][NORTH];
+        sensors[RIGHT] = map[rbPos.row][rbPos.col][SOUTH];
         break;
     case WEST:
-        wallinfo[FRONT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][WEST];
-        wallinfo[LEFT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][SOUTH];
-        wallinfo[RIGHT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][NORTH];
+        sensors[FRONT] = map[rbPos.row][rbPos.col][WEST];
+        sensors[LEFT] = map[rbPos.row][rbPos.col][SOUTH];
+        sensors[RIGHT] = map[rbPos.row][rbPos.col][NORTH];
         break;
     case SOUTH:
-        wallinfo[FRONT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][SOUTH];
-        wallinfo[LEFT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][EAST];
-        wallinfo[RIGHT] = map[rbPos[ROW_CODE]][rbPos[COL_CODE]][WEST];
+        sensors[FRONT] = map[rbPos.row][rbPos.col][SOUTH];
+        sensors[LEFT] = map[rbPos.row][rbPos.col][EAST];
+        sensors[RIGHT] = map[rbPos.row][rbPos.col][WEST];
         break;
     }
 }
 
-void updateWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int sensors[N_SENSORS], unsigned int rbPos[MAP_DIMS], unsigned int rbDir) {
+void updateWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int sensors[N_SENSORS], Position rbPos, unsigned int rbDir) {
     if (sensors[FRONT] == 1)
         setWallFront(map, rbPos, rbDir);
     if (sensors[LEFT] == 1)
@@ -186,52 +186,51 @@ void updateWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int sensors[N_S
         setWallRight(map, rbPos, rbDir);
 }
 
-
-int setNorthWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS]) {
+int setNorthWall(unsigned int map[N_ROW][N_COL][N_WALL], Position rbPos) {
     // update wall information for current position
-    map[rbPos[ROW_CODE]][rbPos[COL_CODE]][NORTH] = 1;
+    map[rbPos.row][rbPos.col][NORTH] = 1;
 
     // update wall information for the neighbour position if any
-    if (isValidPos(rbPos[ROW_CODE] - 1, rbPos[COL_CODE])) {
-        map[rbPos[ROW_CODE] - 1][rbPos[COL_CODE]][SOUTH] = 1;
+    if (isValidPos(rbPos.row - 1, rbPos.col)) {
+        map[rbPos.row - 1][rbPos.col][SOUTH] = 1;
     }
     return TRUE;
 }
 
-int setEastWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS]) {
+int setEastWall(unsigned int map[N_ROW][N_COL][N_WALL], Position rbPos) {
     // update wall information for current position
-    map[rbPos[ROW_CODE]][rbPos[COL_CODE]][EAST] = 1;
+    map[rbPos.row][rbPos.col][EAST] = 1;
 
     // update wall information for the neighbour position if any
-    if (isValidPos(rbPos[ROW_CODE], rbPos[COL_CODE] + 1)) {
-        map[rbPos[ROW_CODE]][rbPos[COL_CODE] + 1][WEST] = 1;
+    if (isValidPos(rbPos.row, rbPos.col + 1)) {
+        map[rbPos.row][rbPos.col + 1][WEST] = 1;
     }
     return TRUE;
 }
 
-int setWestWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS]) {
+int setWestWall(unsigned int map[N_ROW][N_COL][N_WALL], Position rbPos) {
     // update wall information for current position
-    map[rbPos[ROW_CODE]][rbPos[COL_CODE]][WEST] = 1;
+    map[rbPos.row][rbPos.col][WEST] = 1;
 
     // update wall information for the neighbour position if any
-    if (isValidPos(rbPos[ROW_CODE], rbPos[COL_CODE] - 1)) {
-        map[rbPos[ROW_CODE]][rbPos[COL_CODE] - 1][EAST] = 1;
+    if (isValidPos(rbPos.row, rbPos.col - 1)) {
+        map[rbPos.row][rbPos.col - 1][EAST] = 1;
     }
     return TRUE;
 }
 
-int setSouthWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS]) {
+int setSouthWall(unsigned int map[N_ROW][N_COL][N_WALL], Position rbPos) {
     // update wall information for current position
-    map[rbPos[ROW_CODE]][rbPos[COL_CODE]][SOUTH] = 1;
+    map[rbPos.row][rbPos.col][SOUTH] = 1;
 
     // update wall information for the neighbour position if any
-    if (isValidPos(rbPos[ROW_CODE] + 1, rbPos[COL_CODE])) {
-        map[rbPos[ROW_CODE] + 1][rbPos[COL_CODE]][NORTH] = 1;
+    if (isValidPos(rbPos.row + 1, rbPos.col)) {
+        map[rbPos.row + 1][rbPos.col][NORTH] = 1;
     }
     return TRUE;
 }
 
-int setWallFront(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir){
+int setWallFront(unsigned int map[N_ROW][N_COL][N_WALL], Position rbPos, unsigned int rbDir) {
     switch (rbDir) {
     case NORTH:
         setNorthWall(map, rbPos);
@@ -251,7 +250,7 @@ int setWallFront(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_
     return TRUE;
 }
 
-int setWallLeft(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir) {
+int setWallLeft(unsigned int map[N_ROW][N_COL][N_WALL], Position rbPos, unsigned int rbDir) {
     switch (rbDir) {
     case NORTH:
         setWestWall(map, rbPos);
@@ -271,7 +270,7 @@ int setWallLeft(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_D
     return TRUE;
 }
 
-int setWallRight(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int rbPos[MAP_DIMS], unsigned int rbDir) {
+int setWallRight(unsigned int map[N_ROW][N_COL][N_WALL], Position rbPos, unsigned int rbDir) {
     switch (rbDir) {
     case NORTH:
         setEastWall(map, rbPos);

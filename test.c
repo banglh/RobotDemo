@@ -9,7 +9,7 @@
 #include "VisitLog.h"
 //#include "PriorityQueue.h"
 //#include "Dictionary.h"
-#include "Path.h"
+//#include "Path.h"
 
 // real map
 unsigned int rMap[N_ROW][N_COL][N_WALL];
@@ -21,18 +21,20 @@ unsigned int visited[N_ROW][N_COL];
 unsigned int sensors[N_SENSORS];
 
 // position of the robot
-unsigned int startPos[MAP_DIMS];
-unsigned int robotPos[MAP_DIMS];
-unsigned int nextPos[MAP_DIMS];
+//unsigned int startPos[MAP_DIMS];
+//unsigned int robotPos[MAP_DIMS];
+//unsigned int nextPos[MAP_DIMS];
+Position startPos, robotPos, nextPos, humanPos, goalPos;
 
 // stacks
-struct stack rowStack;
-struct stack colStack;
+//struct stack rowStack;
+//struct stack colStack;
+Stack posStack;
 
 // position of the person
-unsigned int humanPos[MAP_DIMS];
+//unsigned int humanPos[MAP_DIMS];
 // position of the goal
-unsigned int goalPos[MAP_DIMS];
+//unsigned int goalPos[MAP_DIMS];
 
 // robot direction
 unsigned int robotDir;
@@ -44,7 +46,7 @@ void buildRealMap() {
     setWall(rMap, 2,1,3,1);
     setWall(rMap, 0,2,0,3);
     setWall(rMap, 2,2,2,3);
-//    setWall(rMap, 3,2,3,3);
+    setWall(rMap, 3,2,3,3);
     setWall(rMap, 1,3,2,3);
     setWall(rMap, 0,4,0,5);
     setWall(rMap, 0,5,1,5);
@@ -54,17 +56,17 @@ void buildRealMap() {
 int isInStack(unsigned int row, unsigned int col) {
     // isInStack
     int i;
-    for (i = rowStack.top; i > -1; i--) {
-        if (rowStack.s[i] == row && colStack.s[i] == col)
+    for (i = posStack.top; i > -1; i--) {
+        if (posStack.s[i].row == row && posStack.s[i].col == col)
             return i;
     }
     return -1;
 }
 
-int isInStack2(unsigned int pos[MAP_DIMS]) {
+int isInStack2(Position pos) {
     int i;
-    for (i = rowStack.top; i > -1; i--) {
-        if (rowStack.s[i] == pos[ROW_CODE] && colStack.s[i] == pos[COL_CODE])
+    for (i = posStack.top; i > -1; i--) {
+        if (isSamePos2(pos, posStack.s[i]))
             return i;
     }
     return -1;
@@ -74,8 +76,8 @@ int isInStack2(unsigned int pos[MAP_DIMS]) {
 int getDeepestPos() {
     // getDeepestPos
     int i;
-    for (i = rowStack.top; i > -1; i--) {
-        if (hasUnvisitedNeighbour(map, visited, rowStack.s[i], colStack.s[i]))
+    for (i = posStack.top; i > -1; i--) {
+        if (hasUnvisitedNeighbour2(map, visited, posStack.s[i]))
             return i;
     }
     return -1;
@@ -92,42 +94,36 @@ void getNextPos() {
     case NORTH:
         // test front position
         if (wallInfo[FRONT]==0) {
-            testRow = robotPos[ROW_CODE] - 1;
-            testCol = robotPos[COL_CODE];
+            testRow = robotPos.row - 1;
+            testCol = robotPos.col;
             if (isValidPos(testRow, testCol)) {
                 if (isVisited(visited, testRow, testCol) == FALSE) {
-                    nextPos[ROW_CODE] = testRow;
-                    nextPos[COL_CODE] = testCol;
-                    push(&rowStack, testRow);
-                    push(&colStack, testCol);
+                    setPos(&nextPos, testRow, testCol);
+                    push(&posStack, nextPos);
                     return;
                 }
             }
         }
         // test left position
         if (wallInfo[LEFT]==0) {
-            testRow = robotPos[ROW_CODE];
-            testCol = robotPos[COL_CODE] - 1;
+            testRow = robotPos.row;
+            testCol = robotPos.col - 1;
             if (isValidPos(testRow, testCol)) {
                 if (isVisited(visited, testRow, testCol) == FALSE) {
-                    nextPos[ROW_CODE] = testRow;
-                    nextPos[COL_CODE] = testCol;
-                    push(&rowStack, testRow);
-                    push(&colStack, testCol);
+                    setPos(&nextPos, testRow, testCol);
+                    push(&posStack, nextPos);
                     return;
                 }
             }
         }
         // test right position
         if (wallInfo[RIGHT]==0) {
-            testRow = robotPos[ROW_CODE];
-            testCol = robotPos[COL_CODE] + 1;
+            testRow = robotPos.row;
+            testCol = robotPos.col + 1;
             if (isValidPos(testRow, testCol)) {
                 if (isVisited(visited, testRow, testCol) == FALSE) {
-                    nextPos[ROW_CODE] = testRow;
-                    nextPos[COL_CODE] = testCol;
-                    push(&rowStack, testRow);
-                    push(&colStack, testCol);
+                    setPos(&nextPos, testRow, testCol);
+                    push(&posStack, nextPos);
                     return;
                 }
             }
@@ -136,42 +132,36 @@ void getNextPos() {
     case EAST:
         // test front position
         if (wallInfo[FRONT]==0) {
-            testRow = robotPos[ROW_CODE];
-            testCol = robotPos[COL_CODE] + 1;
+            testRow = robotPos.row;
+            testCol = robotPos.col + 1;
             if (isValidPos(testRow, testCol)) {
                 if (isVisited(visited, testRow, testCol) == FALSE) {
-                    nextPos[ROW_CODE] = testRow;
-                    nextPos[COL_CODE] = testCol;
-                    push(&rowStack, testRow);
-                    push(&colStack, testCol);
+                    setPos(&nextPos, testRow, testCol);
+                    push(&posStack, nextPos);
                     return;
                 }
             }
         }
         // test left position
         if (wallInfo[LEFT]==0) {
-            testRow = robotPos[ROW_CODE] - 1;
-            testCol = robotPos[COL_CODE];
+            testRow = robotPos.row - 1;
+            testCol = robotPos.col;
             if (isValidPos(testRow, testCol)) {
                 if (isVisited(visited, testRow, testCol) == FALSE) {
-                    nextPos[ROW_CODE] = testRow;
-                    nextPos[COL_CODE] = testCol;
-                    push(&rowStack, testRow);
-                    push(&colStack, testCol);
+                    setPos(&nextPos, testRow, testCol);
+                    push(&posStack, nextPos);
                     return;
                 }
             }
         }
         // test right position
         if (wallInfo[RIGHT]==0) {
-            testRow = robotPos[ROW_CODE] + 1;
-            testCol = robotPos[COL_CODE];
+            testRow = robotPos.row + 1;
+            testCol = robotPos.col;
             if (isValidPos(testRow, testCol)) {
                 if (isVisited(visited, testRow, testCol) == FALSE) {
-                    nextPos[ROW_CODE] = testRow;
-                    nextPos[COL_CODE] = testCol;
-                    push(&rowStack, testRow);
-                    push(&colStack, testCol);
+                    setPos(&nextPos, testRow, testCol);
+                    push(&posStack, nextPos);
                     return;
                 }
             }
@@ -180,42 +170,36 @@ void getNextPos() {
     case WEST:
         // test front position
         if (wallInfo[FRONT]==0) {
-            testRow = robotPos[ROW_CODE];
-            testCol = robotPos[COL_CODE] - 1;
+            testRow = robotPos.row;
+            testCol = robotPos.col - 1;
             if (isValidPos(testRow, testCol)) {
                 if (isVisited(visited, testRow, testCol) == FALSE) {
-                    nextPos[ROW_CODE] = testRow;
-                    nextPos[COL_CODE] = testCol;
-                    push(&rowStack, testRow);
-                    push(&colStack, testCol);
+                    setPos(&nextPos, testRow, testCol);
+                    push(&posStack, nextPos);
                     return;
                 }
             }
         }
         // test left position
         if (wallInfo[LEFT]==0) {
-            testRow = robotPos[ROW_CODE] + 1;
-            testCol = robotPos[COL_CODE];
+            testRow = robotPos.row + 1;
+            testCol = robotPos.col;
             if (isValidPos(testRow, testCol)) {
                 if (isVisited(visited, testRow, testCol) == FALSE) {
-                    nextPos[ROW_CODE] = testRow;
-                    nextPos[COL_CODE] = testCol;
-                    push(&rowStack, testRow);
-                    push(&colStack, testCol);
+                    setPos(&nextPos, testRow, testCol);
+                    push(&posStack, nextPos);
                     return;
                 }
             }
         }
         // test right position
         if (wallInfo[RIGHT]==0) {
-            testRow = robotPos[ROW_CODE] - 1;
-            testCol = robotPos[COL_CODE];
+            testRow = robotPos.row - 1;
+            testCol = robotPos.col;
             if (isValidPos(testRow, testCol)) {
                 if (isVisited(visited, testRow, testCol) == FALSE) {
-                    nextPos[ROW_CODE] = testRow;
-                    nextPos[COL_CODE] = testCol;
-                    push(&rowStack, testRow);
-                    push(&colStack, testCol);
+                    setPos(&nextPos, testRow, testCol);
+                    push(&posStack, nextPos);
                     return;
                 }
             }
@@ -224,42 +208,36 @@ void getNextPos() {
     case SOUTH:
         // test front position
         if (wallInfo[FRONT]==0) {
-            testRow = robotPos[ROW_CODE] + 1;
-            testCol = robotPos[COL_CODE];
+            testRow = robotPos.row + 1;
+            testCol = robotPos.col;
             if (isValidPos(testRow, testCol)) {
                 if (isVisited(visited, testRow, testCol) == FALSE) {
-                    nextPos[ROW_CODE] = testRow;
-                    nextPos[COL_CODE] = testCol;
-                    push(&rowStack, testRow);
-                    push(&colStack, testCol);
+                    setPos(&nextPos, testRow, testCol);
+                    push(&posStack, nextPos);
                     return;
                 }
             }
         }
         // test left position
         if (wallInfo[LEFT]==0) {
-            testRow = robotPos[ROW_CODE];
-            testCol = robotPos[COL_CODE] + 1;
+            testRow = robotPos.row;
+            testCol = robotPos.col + 1;
             if (isValidPos(testRow, testCol)) {
                 if (isVisited(visited, testRow, testCol) == FALSE) {
-                    nextPos[ROW_CODE] = testRow;
-                    nextPos[COL_CODE] = testCol;
-                    push(&rowStack, testRow);
-                    push(&colStack, testCol);
+                    setPos(&nextPos, testRow, testCol);
+                    push(&posStack, nextPos);
                     return;
                 }
             }
         }
         // test right position
         if (wallInfo[RIGHT]==0) {
-            testRow = robotPos[ROW_CODE];
-            testCol = robotPos[COL_CODE] - 1;
+            testRow = robotPos.row;
+            testCol = robotPos.col - 1;
             if (isValidPos(testRow, testCol)) {
                 if (isVisited(visited, testRow, testCol) == FALSE) {
-                    nextPos[ROW_CODE] = testRow;
-                    nextPos[COL_CODE] = testCol;
-                    push(&rowStack, testRow);
-                    push(&colStack, testCol);
+                    setPos(&nextPos, testRow, testCol);
+                    push(&posStack, nextPos);
                     return;
                 }
             }
@@ -271,44 +249,35 @@ void getNextPos() {
     if (stepN == 1) {
         switch (robotDir) {
         case NORTH:
-            nextPos[ROW_CODE] = robotPos[ROW_CODE] + 1;
-            nextPos[COL_CODE] = robotPos[COL_CODE];
+            setPos(&nextPos, robotPos.row + 1, robotPos.col);
             break;
         case EAST:
-            nextPos[ROW_CODE] = robotPos[ROW_CODE];
-            nextPos[COL_CODE] = robotPos[COL_CODE] - 1;
+            setPos(&nextPos, robotPos.row, robotPos.col - 1);
             break;
         case WEST:
-            nextPos[ROW_CODE] = robotPos[ROW_CODE];
-            nextPos[COL_CODE] = robotPos[COL_CODE] + 1;
+            setPos(&nextPos, robotPos.row, robotPos.col + 1);
             break;
         case SOUTH:
-            nextPos[ROW_CODE] = robotPos[ROW_CODE] - 1;
-            nextPos[COL_CODE] = robotPos[COL_CODE];
+            setPos(&nextPos, robotPos.row - 1, robotPos.col);
             break;
         }
-        push(&rowStack, nextPos[ROW_CODE]);
-        push(&colStack, nextPos[COL_CODE]);
+        push(&posStack, nextPos);
         return;
     }
 
     // backtrack
-    pop(&rowStack);
-    pop(&colStack);
+    pop(&posStack);
 
     // check if stack is empty
-    if (isEmptyStack(rowStack)) {
-        nextPos[ROW_CODE] = -1;
-        nextPos[COL_CODE] = -1;
+    if (isEmptyStack(posStack)) {
+        setPos(&nextPos, -1, -1);
         return;
     }
 
     // check if previous position has unvisited neighbour
-    unsigned int prevRow = head(rowStack);
-    unsigned int prevCol = head(colStack);
-    if (hasUnvisitedNeighbour(map, visited, prevRow, prevCol)) {
-        nextPos[ROW_CODE] = prevRow;
-        nextPos[COL_CODE] = prevCol;
+    Position prevPos = head(posStack);
+    if (hasUnvisitedNeighbour2(map, visited, prevPos)) {
+        nextPos = prevPos;
         return;
     }
 
@@ -317,16 +286,14 @@ void getNextPos() {
 
     // test if one of the neighbours of current position is in stack
     int index = 1000;
-//    unsigned int backRow = -1;
-//    unsigned int backCol = -1;
     int i, r, c, sid;
     //// for each neighbour
     for (i = -2; i < 3; i++) {
         if (i != 0) {
-            r = robotPos[ROW_CODE] + i/2;
-            c = robotPos[COL_CODE] + i%2;
-            if (r != prevRow || c != prevCol) {
-                if (isValidPos(r, c) && !checkWall(map, r, c, robotPos[ROW_CODE], robotPos[COL_CODE])) {
+            r = robotPos.row + i/2;
+            c = robotPos.col + i%2;
+            if (r != prevPos.row || c != prevPos.col) {
+                if (isValidPos(r, c) && !checkWall(map, r, c, robotPos.row, robotPos.col)) {
                     sid = isInStack(r, c);
                     if (sid > -1 && sid >= deepestIndex && sid < index) {
                         index = sid;
@@ -337,12 +304,10 @@ void getNextPos() {
     }
 
     if (index < 1000) {
-        popToIndex(&rowStack, index);
-        popToIndex(&colStack, index);
+        popToIndex(&posStack, index);
     }
 
-    nextPos[ROW_CODE] = head(rowStack);
-    nextPos[COL_CODE] = head(colStack);
+    nextPos = head(posStack);
 }
 
 int step() {
@@ -369,180 +334,179 @@ void move() {
     robotDir = getNewDirection(robotPos, nextPos);
 
     // update robot position
-    robotPos[ROW_CODE] = nextPos[ROW_CODE];
-    robotPos[COL_CODE] = nextPos[COL_CODE];
+    robotPos = nextPos;
 }
 
 // function to check if a position can be a subGoal or not
-int isSubGoal(unsigned int checkRow, unsigned int checkCol, unsigned int curGoalRow, unsigned int curGoalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
-    /* criteria
-    1. neighbor of current goal
-    2. Not the final goal
-    3. Not at the corner
-    4. There is no wall between the subGoal and the position A (subGoal is between A and the goal)
-    5. After robot move the person from subGoal to the current goal, it can continue with the prevGoal (no need to check when goal == prevGoal == final goal)
-    6. Assume subGoal == prevGoal, if robot still can move person from subGoal back to current goal after move it from current goal to subGoal  invalid subGoal
-    */
-
-    // check if the candidate is the final goal
-    if (isSamePos(checkRow, checkCol, goalPos[ROW_CODE], goalPos[COL_CODE]))
-        return FALSE;
-
-    // check if there is wall between current goal and the candidate position
-    if (checkWall(map, checkRow, checkCol, curGoalRow, curGoalCol))
-        return FALSE;
-
-    // check if the candidate is a corner position
-    if (isCornerPos(visited, checkRow, checkCol))
-        return FALSE;
-
-    // check if robot can move person from the candidate position to the current goal
-    if (!isMovable(map, checkRow, checkCol, curGoalRow, curGoalCol))
-        return FALSE;
-
-    // check criterion 5
-    if (!isSamePos(goalPos[ROW_CODE], goalPos[COL_CODE], prevGoalRow, prevGoalCol)) {
-        // check if there is a path from the candidate position to the position X from which robot move person from the current goal to the prevGoal
-        // given the human is at the current goal
-        unsigned int rowX = curGoalRow + curGoalRow - prevGoalRow;
-        unsigned int colX = curGoalCol + curGoalCol - prevGoalCol;
-        if (!hasPath(map, checkRow, checkCol, rowX, colX, curGoalRow, curGoalCol))
-            return FALSE;
-    }
-
-    // check criterion 6
-    if (isSamePos(checkRow, checkCol, prevGoalRow, prevGoalCol)) {
-        // check if there is a path from current goal to the position from which robot move person given person position is at subGoal
-        unsigned int xRow = checkRow + checkRow - curGoalRow;
-        unsigned int xCol = checkCol + checkCol - curGoalCol;
-        if (hasPath(map, curGoalRow, curGoalCol, xRow, xCol, checkRow, checkCol))
-            return FALSE;
-    }
-
-    // all the criteria is satisfied
-    return TRUE;
-}
-
-// function to get subGoal candidates
-void getCandidates(int candidates[4][MAP_DIMS], unsigned int curGoalRow, unsigned int curGoalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
-    // get candidates
-    int j = 0;
-    int i;
-    for (i = -2; i < 3; i++) {
-        if (i != 0) {
-            candidates[j][ROW_CODE] = curGoalRow + i/2;
-            candidates[j][COL_CODE] = curGoalCol + i%2;
-            j++;
-        }
-    }
-
-    // sort candidates
-    int tmpRow, tmpCol, costi, costj;
-    int acrossRow = curGoalRow + curGoalRow - prevGoalRow;
-    int acrossCol = curGoalCol + curGoalCol - prevGoalCol;
-    for (i = 0; i < 3; i++) {
-        for (j = i+1; j < 4; j++) {
-            // get cost i
-            if (isValidPos(candidates[i][ROW_CODE], candidates[i][COL_CODE]))
-                costi = estimateCost(candidates[i][ROW_CODE], candidates[i][COL_CODE], humanPos[ROW_CODE], humanPos[COL_CODE]);
-            else
-                costi = MAX_VALUE;
-
-            // get cost j
-            if (isValidPos(candidates[j][ROW_CODE], candidates[j][COL_CODE]))
-                costj = estimateCost(candidates[j][ROW_CODE], candidates[j][COL_CODE], humanPos[ROW_CODE], humanPos[COL_CODE]);
-            else
-                costj = MAX_VALUE;
-
-            // exchange if costi > costj
-            if (costi > costj) {
-                tmpRow = candidates[i][ROW_CODE];
-                tmpCol = candidates[i][COL_CODE];
-                candidates[i][ROW_CODE] = candidates[j][ROW_CODE];
-                candidates[i][COL_CODE] = candidates[j][COL_CODE];
-                candidates[j][ROW_CODE] = tmpRow;
-                candidates[j][COL_CODE] = tmpCol;
-            }
-
-            if (costi == costj && costi != MAX_VALUE) {
-                if (candidates[j][ROW_CODE] == acrossRow && candidates[j][COL_CODE] == acrossCol) {
-                    tmpRow = candidates[i][ROW_CODE];
-                    tmpCol = candidates[i][COL_CODE];
-                    candidates[i][ROW_CODE] = candidates[j][ROW_CODE];
-                    candidates[i][COL_CODE] = candidates[j][COL_CODE];
-                    candidates[j][ROW_CODE] = tmpRow;
-                    candidates[j][COL_CODE] = tmpCol;
-                }
-            }
-        }
-    }
-}
-
-// implement the function to find a solution for rescuing the person
-// [Bug fixed] infinitive function call when there is no solution
-int findSolution(unsigned int goalRow, unsigned int goalCol, unsigned int prevGoalRow, unsigned int prevGoalCol, int depth) {
-    // limit the depth of tree search
-    if (depth == MAX_DEPTH)
-        return FALSE;
-
-    int candidates[4][MAP_DIMS];
-
-    // get candidates
-    getCandidates(candidates, goalRow, goalCol, prevGoalRow, prevGoalCol);
-
-    /*******/
-    printf("current goal: (%d, %d), prevGoal: (%d, %d)\n", goalRow, goalCol, prevGoalRow, prevGoalCol);
-    int i;
-    for (i = 0; i < 4; i++) {
-        printf("candidate %d: (%d, %d), ", i, candidates[i][ROW_CODE], candidates[i][COL_CODE]);
-    }
-    printf("\ndepth = %d", depth);
-    printf("\n\n");
-//    getchar();
-    /*******/
-
-    // for each candidate
-    int c, cRow, cCol;
-    for (c = 0; c < 4; c++) {
-        cRow = candidates[c][ROW_CODE];
-        cCol = candidates[c][COL_CODE];
-        if (isValidPos(cRow, cCol)) {
-            if (isSubGoal(cRow, cCol, goalRow, goalCol, prevGoalRow, prevGoalCol)) {
-                // push subGoal to stack
-                push(&rowStack, cRow);
-                push(&colStack, cCol);
-
-                // check element problem (when the subGoal is the initial human position)
-                if (isSamePos(cRow, cCol, humanPos[ROW_CODE], humanPos[COL_CODE])) {
-                    int rowX = cRow + cRow - goalRow;
-                    int colX = cCol + cCol - goalCol;
-                    if (hasPath(map, startPos[ROW_CODE], startPos[COL_CODE], rowX, colX, cRow, cCol)) {
-                        // there is a solution
-                        return TRUE;
-                    } else {
-                        // solution invalid
-                        pop(&rowStack);
-                        pop(&colStack);
-                        return FALSE;
-                    }
-                }
-
-                // otherwise, solve a sub problem with the subGoal as the goal and the current goal as the prevGoal
-                int hasSolution = findSolution(cRow, cCol, goalRow, goalCol, depth + 1);
-
-                if (hasSolution)
-                    return TRUE;
-                else {
-                    pop(&rowStack);
-                    pop(&colStack);
-                    continue;
-                }
-            }
-        }
-    }
-
-    return FALSE;
-}
+//int isSubGoal(unsigned int checkRow, unsigned int checkCol, unsigned int curGoalRow, unsigned int curGoalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
+//    /* criteria
+//    1. neighbor of current goal
+//    2. Not the final goal
+//    3. Not at the corner
+//    4. There is no wall between the subGoal and the position A (subGoal is between A and the goal)
+//    5. After robot move the person from subGoal to the current goal, it can continue with the prevGoal (no need to check when goal == prevGoal == final goal)
+//    6. Assume subGoal == prevGoal, if robot still can move person from subGoal back to current goal after move it from current goal to subGoal  invalid subGoal
+//    */
+//
+//    // check if the candidate is the final goal
+//    if (isSamePos(checkRow, checkCol, goalPos.row, goalPos.col))
+//        return FALSE;
+//
+//    // check if there is wall between current goal and the candidate position
+//    if (checkWall(map, checkRow, checkCol, curGoalRow, curGoalCol))
+//        return FALSE;
+//
+//    // check if the candidate is a corner position
+//    if (isCornerPos(visited, checkRow, checkCol))
+//        return FALSE;
+//
+//    // check if robot can move person from the candidate position to the current goal
+//    if (!isMovable(map, checkRow, checkCol, curGoalRow, curGoalCol))
+//        return FALSE;
+//
+//    // check criterion 5
+//    if (!isSamePos(goalPos.row, goalPos.col, prevGoalRow, prevGoalCol)) {
+//        // check if there is a path from the candidate position to the position X from which robot move person from the current goal to the prevGoal
+//        // given the human is at the current goal
+//        unsigned int rowX = curGoalRow + curGoalRow - prevGoalRow;
+//        unsigned int colX = curGoalCol + curGoalCol - prevGoalCol;
+//        if (!hasPath(map, checkRow, checkCol, rowX, colX, curGoalRow, curGoalCol))
+//            return FALSE;
+//    }
+//
+//    // check criterion 6
+//    if (isSamePos(checkRow, checkCol, prevGoalRow, prevGoalCol)) {
+//        // check if there is a path from current goal to the position from which robot move person given person position is at subGoal
+//        unsigned int xRow = checkRow + checkRow - curGoalRow;
+//        unsigned int xCol = checkCol + checkCol - curGoalCol;
+//        if (hasPath(map, curGoalRow, curGoalCol, xRow, xCol, checkRow, checkCol))
+//            return FALSE;
+//    }
+//
+//    // all the criteria is satisfied
+//    return TRUE;
+//}
+//
+//// function to get subGoal candidates
+//void getCandidates(int candidates[4][MAP_DIMS], unsigned int curGoalRow, unsigned int curGoalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
+//    // get candidates
+//    int j = 0;
+//    int i;
+//    for (i = -2; i < 3; i++) {
+//        if (i != 0) {
+//            candidates[j].row = curGoalRow + i/2;
+//            candidates[j].col = curGoalCol + i%2;
+//            j++;
+//        }
+//    }
+//
+//    // sort candidates
+//    int tmpRow, tmpCol, costi, costj;
+//    int acrossRow = curGoalRow + curGoalRow - prevGoalRow;
+//    int acrossCol = curGoalCol + curGoalCol - prevGoalCol;
+//    for (i = 0; i < 3; i++) {
+//        for (j = i+1; j < 4; j++) {
+//            // get cost i
+//            if (isValidPos(candidates[i].row, candidates[i].col))
+//                costi = estimateCost(candidates[i][ROW_CODE], candidates[i].col, humanPos[ROW_CODE], humanPos.col);
+//            else
+//                costi = MAX_VALUE;
+//
+//            // get cost j
+//            if (isValidPos(candidates[j][ROW_CODE], candidates[j].col))
+//                costj = estimateCost(candidates[j][ROW_CODE], candidates[j].col, humanPos[ROW_CODE], humanPos.col);
+//            else
+//                costj = MAX_VALUE;
+//
+//            // exchange if costi > costj
+//            if (costi > costj) {
+//                tmpRow = candidates[i][ROW_CODE];
+//                tmpCol = candidates[i].col;
+//                candidates[i][ROW_CODE] = candidates[j][ROW_CODE];
+//                candidates[i].col = candidates[j].col;
+//                candidates[j][ROW_CODE] = tmpRow;
+//                candidates[j].col = tmpCol;
+//            }
+//
+//            if (costi == costj && costi != MAX_VALUE) {
+//                if (candidates[j][ROW_CODE] == acrossRow && candidates[j].col == acrossCol) {
+//                    tmpRow = candidates[i][ROW_CODE];
+//                    tmpCol = candidates[i].col;
+//                    candidates[i][ROW_CODE] = candidates[j][ROW_CODE];
+//                    candidates[i].col = candidates[j].col;
+//                    candidates[j][ROW_CODE] = tmpRow;
+//                    candidates[j].col = tmpCol;
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//// implement the function to find a solution for rescuing the person
+//// [Bug fixed] infinitive function call when there is no solution
+//int findSolution(unsigned int goalRow, unsigned int goalCol, unsigned int prevGoalRow, unsigned int prevGoalCol, int depth) {
+//    // limit the depth of tree search
+//    if (depth == MAX_DEPTH)
+//        return FALSE;
+//
+//    int candidates[4][MAP_DIMS];
+//
+//    // get candidates
+//    getCandidates(candidates, goalRow, goalCol, prevGoalRow, prevGoalCol);
+//
+//    /*******/
+//    printf("current goal: (%d, %d), prevGoal: (%d, %d)\n", goalRow, goalCol, prevGoalRow, prevGoalCol);
+//    int i;
+//    for (i = 0; i < 4; i++) {
+//        printf("candidate %d: (%d, %d), ", i, candidates[i][ROW_CODE], candidates[i].col);
+//    }
+//    printf("\ndepth = %d", depth);
+//    printf("\n\n");
+////    getchar();
+//    /*******/
+//
+//    // for each candidate
+//    int c, cRow, cCol;
+//    for (c = 0; c < 4; c++) {
+//        cRow = candidates[c][ROW_CODE];
+//        cCol = candidates[c].col;
+//        if (isValidPos(cRow, cCol)) {
+//            if (isSubGoal(cRow, cCol, goalRow, goalCol, prevGoalRow, prevGoalCol)) {
+//                // push subGoal to stack
+//                push(&rowStack, cRow);
+//                push(&colStack, cCol);
+//
+//                // check element problem (when the subGoal is the initial human position)
+//                if (isSamePos(cRow, cCol, humanPos[ROW_CODE], humanPos.col)) {
+//                    int rowX = cRow + cRow - goalRow;
+//                    int colX = cCol + cCol - goalCol;
+//                    if (hasPath(map, startPos[ROW_CODE], startPos.col, rowX, colX, cRow, cCol)) {
+//                        // there is a solution
+//                        return TRUE;
+//                    } else {
+//                        // solution invalid
+//                        pop(&rowStack);
+//                        pop(&colStack);
+//                        return FALSE;
+//                    }
+//                }
+//
+//                // otherwise, solve a sub problem with the subGoal as the goal and the current goal as the prevGoal
+//                int hasSolution = findSolution(cRow, cCol, goalRow, goalCol, depth + 1);
+//
+//                if (hasSolution)
+//                    return TRUE;
+//                else {
+//                    pop(&rowStack);
+//                    pop(&colStack);
+//                    continue;
+//                }
+//            }
+//        }
+//    }
+//
+//    return FALSE;
+//}
 
 int main()
 {
@@ -560,22 +524,20 @@ int main()
     visitLogInit(visited);
 
     // set robot position and direction
-    setPos(startPos, 3, 0);
-    setPos(robotPos, 3, 0);
+    setPos(&startPos, 3, 0);
+    setPos(&robotPos, 3, 0);
     setDirection(&robotDir, NORTH);
 
     // set human position
-    setPos(humanPos, 2,2);
+    setPos(&humanPos, 2,2);
     setVisited2(visited, humanPos);
 
     // set goal position
-    setPos(goalPos, 0,4);
+    setPos(&goalPos, 0,4);
 
     // initialize stacks
-    stackInit(&rowStack);
-    stackInit(&colStack);
-    push(&rowStack, robotPos[ROW_CODE]);
-    push(&colStack, robotPos[COL_CODE]);
+    stackInit(&posStack);
+    push(&posStack, robotPos);
 
     // run
     int action;
@@ -583,12 +545,11 @@ int main()
     while (TRUE) {
         stepN++;
 
-//        printStack(rowStack);
-//        printStack(colStack);
+//        printStack(posStack);
 
         action = step();
 
-        printf("%-5d | (%-d, %-d) | ", stepN, robotPos[ROW_CODE], robotPos[COL_CODE]);
+        printf("%-5d | (%-d, %-d) | ", stepN, robotPos.row, robotPos.col);
         printDirection(robotDir);
         printf(" | ");
         printAction(action);
@@ -609,7 +570,7 @@ int main()
     printf("End of phase 1\n\n");
 //    getchar();
 
-    /********** Phase 2: Plan to rescue ***********/
+    /********** Phase 2: Plan to rescue ***********
     // mark the corner positions in the visited array
     getCornersPos(map, visited);
 
@@ -619,10 +580,10 @@ int main()
 
     // call function to find the path to move the person to the final goal
     int hasSolution;
-    if (!isCornerPos(visited, humanPos[ROW_CODE], humanPos[COL_CODE])
-        && hasPath(map, humanPos[ROW_CODE], humanPos[COL_CODE], goalPos[ROW_CODE], goalPos[COL_CODE], -1, -1)
-        && hasPath(map, humanPos[ROW_CODE], humanPos[COL_CODE], startPos[ROW_CODE], startPos[COL_CODE], -1, -1)) {
-            hasSolution = findSolution(goalPos[ROW_CODE], goalPos[COL_CODE], goalPos[ROW_CODE], goalPos[COL_CODE], 0);
+    if (!isCornerPos(visited, humanPos[ROW_CODE], humanPos.col)
+        && hasPath(map, humanPos[ROW_CODE], humanPos.col, goalPos[ROW_CODE], goalPos.col, -1, -1)
+        && hasPath(map, humanPos[ROW_CODE], humanPos.col, startPos[ROW_CODE], startPos.col, -1, -1)) {
+            hasSolution = findSolution(goalPos[ROW_CODE], goalPos.col, goalPos[ROW_CODE], goalPos.col, 0);
     } else {
         hasSolution = FALSE;
     }

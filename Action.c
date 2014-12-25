@@ -1,6 +1,6 @@
 #include "Action.h"
 
-int getAction(unsigned int curpos[MAP_DIMS], unsigned int nextpos[MAP_DIMS], unsigned int curDir) {
+int getAction(Position curpos, Position nextpos, unsigned int curDir) {
     switch (curDir) {
     case NORTH:
         return getActionNorth(curpos, nextpos);
@@ -13,60 +13,60 @@ int getAction(unsigned int curpos[MAP_DIMS], unsigned int nextpos[MAP_DIMS], uns
     }
 }
 
-int getActionNorth(unsigned int curpos[MAP_DIMS], unsigned int nextpos[MAP_DIMS]) {
-    if (curpos[ROW_CODE] == nextpos[ROW_CODE]) {
-        if (nextpos[COL_CODE] < curpos[COL_CODE])
+int getActionNorth(Position curpos, Position nextpos) {
+    if (curpos.row == nextpos.row) {
+        if (nextpos.col < curpos.col)
             return MOVE_LEFT;
         else
             return MOVE_RIGHT;
 
-    } else if (curpos[COL_CODE] == nextpos[COL_CODE]) {
-        if (nextpos[ROW_CODE] < curpos[ROW_CODE])
+    } else if (curpos.col == nextpos.col) {
+        if (nextpos.row < curpos.row)
             return MOVE_FORWARD;
         else
             return MOVE_BACKWARD;
     }
 }
 
-int getActionEast(unsigned int curpos[MAP_DIMS], unsigned int nextpos[MAP_DIMS]) {
-    if (curpos[ROW_CODE] == nextpos[ROW_CODE]) {
-        if (nextpos[COL_CODE] < curpos[COL_CODE])
+int getActionEast(Position curpos, Position nextpos) {
+    if (curpos.row == nextpos.row) {
+        if (nextpos.col < curpos.col)
             return MOVE_BACKWARD;
         else
             return MOVE_FORWARD;
 
-    } else if (curpos[COL_CODE] == nextpos[COL_CODE]) {
-        if (nextpos[ROW_CODE] < curpos[ROW_CODE])
+    } else if (curpos.col == nextpos.col) {
+        if (nextpos.row < curpos.row)
             return MOVE_LEFT;
         else
             return MOVE_RIGHT;
     }
 }
 
-int getActionWest(unsigned int curpos[MAP_DIMS], unsigned int nextpos[MAP_DIMS]) {
-    if (curpos[ROW_CODE] == nextpos[ROW_CODE]) {
-        if (nextpos[COL_CODE] < curpos[COL_CODE])
+int getActionWest(Position curpos, Position nextpos) {
+    if (curpos.row == nextpos.row) {
+        if (nextpos.col < curpos.col)
             return MOVE_FORWARD;
         else
             return MOVE_BACKWARD;
 
-    } else if (curpos[COL_CODE] == nextpos[COL_CODE]) {
-        if (nextpos[ROW_CODE] < curpos[ROW_CODE])
+    } else if (curpos.col == nextpos.col) {
+        if (nextpos.row < curpos.row)
             return MOVE_RIGHT;
         else
             return MOVE_LEFT;
     }
 }
 
-int getActionSouth(unsigned int curpos[MAP_DIMS], unsigned int nextpos[MAP_DIMS]) {
-    if (curpos[ROW_CODE] == nextpos[ROW_CODE]) {
-        if (nextpos[COL_CODE] < curpos[COL_CODE])
+int getActionSouth(Position curpos, Position nextpos) {
+    if (curpos.row == nextpos.row) {
+        if (nextpos.col < curpos.col)
             return MOVE_RIGHT;
         else
             return MOVE_LEFT;
 
-    } else if (curpos[COL_CODE] == nextpos[COL_CODE]) {
-        if (nextpos[ROW_CODE] < curpos[ROW_CODE])
+    } else if (curpos.col == nextpos.col) {
+        if (nextpos.row < curpos.row)
             return MOVE_BACKWARD;
         else
             return MOVE_FORWARD;
