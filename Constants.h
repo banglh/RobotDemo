@@ -38,3 +38,4 @@
 
 #define GAME_QUEUE_SIZE 100
 #define GAME_DICT_SIZE 100
+#define GAME_TRACK_SIZE 100
