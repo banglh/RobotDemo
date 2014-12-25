@@ -544,5 +544,16 @@ int main()
     }
     /*********************************************************/
 
+    PosTrack posTr;
+    initPosTrack(&posTr);
+
+    Position p1 = newPosition(3,0);
+    Position p2 = newPosition(3,5);
+
+    int a = findPath2(map, &posTr, p1, p2, newPosition(2,2));
+
+    printf("\na = %d\n", a);
+    printPosTrack(posTr);
+
     return 0;
 }

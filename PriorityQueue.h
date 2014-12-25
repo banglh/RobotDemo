@@ -15,7 +15,6 @@ typedef struct {
     int qsize;
 } PriorityQueue;
 
-/******************* function for priority queue *******************/
 void queueInit(PriorityQueue * pqueue);
 QueueElement dequeue(PriorityQueue * pqueue);
 void enqueue(PriorityQueue * pqueue, QueueElement element);

@@ -7,13 +7,15 @@
 #include "Dictionary.h"
 #include "Position.h"
 #include "Map.h"
+#include "PosTrack.h"
 
 #define ELEMENT_COST 1
 
 unsigned int estimateCost(unsigned int startRow, unsigned int startCol, unsigned int endRow, unsigned int endCol);
 unsigned int estimateCost2(Position startPos, Position endPos);
 
-int findPath(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int startRow, unsigned int startCol, unsigned int endRow, unsigned int endCol, unsigned int humanRow, unsigned int humanCol);
+int findPath(unsigned int map[N_ROW][N_COL][N_WALL], PosTrack * posTr, unsigned int startRow, unsigned int startCol, unsigned int endRow, unsigned int endCol, unsigned int humanRow, unsigned int humanCol);
+int findPath2(unsigned int map[N_ROW][N_COL][N_WALL], PosTrack * posTr, Position startPos, Position endPos, Position humanPos);
 
 // function to check if there is a path between two position given the position of person
 int hasPath(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int startRow, unsigned int startCol, unsigned int endRow, unsigned int endCol, unsigned int humanRow, unsigned int humanCol);
