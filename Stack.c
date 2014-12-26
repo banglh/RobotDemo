@@ -62,7 +62,7 @@ void resetStack(Stack *st) {
     (*st).top = -1;
 }
 
-int isInStack(Stack st, unsigned int row, unsigned int col) {
+int isInStack(Stack st, int row, int col) {
     // isInStack
     int i;
     for (i = st.top; i > -1; i--) {

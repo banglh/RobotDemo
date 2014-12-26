@@ -31,14 +31,14 @@ int isVisited2(unsigned int visit[N_ROW][N_COL], Position pos) {
         return FALSE;
 }
 
-int isVisited(unsigned int visit[N_ROW][N_COL], unsigned int row, unsigned int col) {
+int isVisited(unsigned int visit[N_ROW][N_COL], int row, int col) {
     if (visit[row][col] == 1)
         return TRUE;
     else
         return FALSE;
 }
 
-void setVisited(unsigned int visit[N_ROW][N_COL], unsigned int row, unsigned int col) {
+void setVisited(unsigned int visit[N_ROW][N_COL], int row, int col) {
     if (visit[row][col] == 0)
         visit[row][col] = 1;
 }
@@ -48,7 +48,7 @@ void setVisited2(unsigned int visit[N_ROW][N_COL], Position pos) {
         visit[pos.row][pos.col] = 1;
 }
 
-int hasUnvisitedNeighbour(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int visit[N_ROW][N_COL], unsigned int row, unsigned int col) {
+int hasUnvisitedNeighbour(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int visit[N_ROW][N_COL], int row, int col) {
     // hasUnvisitedNeighbour
     int i;
     for (i = -2; i < 3; i++) {

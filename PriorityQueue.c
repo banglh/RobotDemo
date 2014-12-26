@@ -57,7 +57,7 @@ void printQueue(PriorityQueue pqueue) {
     printf("\n");
 }
 
-QueueElement newQueueElement(unsigned int row, unsigned int col, unsigned int priority) {
+QueueElement newQueueElement(int row, int col, unsigned int priority) {
     QueueElement e;
     e.pos.row = row;
     e.pos.col = col;
@@ -72,7 +72,7 @@ QueueElement newQueueElement2(Position pos, unsigned int priority) {
     return e;
 }
 
-void setQueueElement(QueueElement *qe, unsigned int row, unsigned int col, unsigned int priority) {
+void setQueueElement(QueueElement *qe, int row, int col, unsigned int priority) {
     (*qe).pos.row = row;
     (*qe).pos.col = col;
     (*qe).priority = priority;

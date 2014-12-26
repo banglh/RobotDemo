@@ -12,12 +12,12 @@ typedef struct {
 } GameDict;
 
 void initGameDict(GameDict * gd);
-int hasState(GameDict gd, unsigned int rbRow, unsigned int rbCol, unsigned int hmRow, unsigned int hmCol);
+int hasState(GameDict gd, int rbRow, int rbCol, int hmRow, int hmCol);
 int hasState2(GameDict gd, Position rbP, Position hmP);
-void addState(GameDict * gd, unsigned int rbRow, unsigned int rbCol, unsigned int hmRow, unsigned int hmCol, int newVal);
+void addState(GameDict * gd, int rbRow, int rbCol, int hmRow, int hmCol, int newVal);
 void addState2(GameDict * gd, Position rbP, Position hmP, int newVal);
-int deleteState(GameDict * gd, unsigned int rbRow, unsigned int rbCol, unsigned int hmRow, unsigned int hmCol);
-int getStateCost(GameDict gd, unsigned int rbRow, unsigned int rbCol, unsigned int hmRow, unsigned int hmCol);
+int deleteState(GameDict * gd, int rbRow, int rbCol, int hmRow, int hmCol);
+int getStateCost(GameDict gd, int rbRow, int rbCol, int hmRow, int hmCol);
 int getStateCost2(GameDict gd, Position rbP, Position hmP);
 void printGameDict(GameDict gd);
 

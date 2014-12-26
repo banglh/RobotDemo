@@ -21,8 +21,8 @@ void enGameQueue(GameQueue * gqueue, GameQueueElement element);
 int isEmptyGameQueue(GameQueue gqueue);
 void printGameQueue(GameQueue gqueue);
 
-GameQueueElement newGameQueueElement(unsigned int rbRow, unsigned int rbCol, unsigned int hmRow, unsigned int hmCol, unsigned int priority);
+GameQueueElement newGameQueueElement(int rbRow, int rbCol, int hmRow, int hmCol, unsigned int priority);
 GameQueueElement newGameQueueElement2(Position rbP, Position hmP, unsigned int priority);
-void setGameQueueElement(GameQueueElement *qe, unsigned int rbRow, unsigned int rbCol, unsigned int hmRow, unsigned int hmCol, unsigned int priority);
+void setGameQueueElement(GameQueueElement *qe, int rbRow, int rbCol, int hmRow, int hmCol, unsigned int priority);
 
 #endif // __GAME_QUEUE_H

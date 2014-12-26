@@ -4,7 +4,7 @@ void initGameDict(GameDict * gd) {
     (*gd).gdSize = 0;
 }
 
-int hasState(GameDict gd, unsigned int rbRow, unsigned int rbCol, unsigned int hmRow, unsigned int hmCol) {
+int hasState(GameDict gd, int rbRow, int rbCol, int hmRow, int hmCol) {
     int i;
     GameState gs = newGameState(newPosition(rbRow, rbCol), newPosition(hmRow, hmCol));
     for (i = 0; i < gd.gdSize; i++) {
@@ -24,7 +24,7 @@ int hasState2(GameDict gd, Position rbP, Position hmP) {
     return FALSE;
 }
 
-void addState(GameDict * gd, unsigned int rbRow, unsigned int rbCol, unsigned int hmRow, unsigned int hmCol, int newVal) {
+void addState(GameDict * gd, int rbRow, int rbCol, int hmRow, int hmCol, int newVal) {
     int i;
     GameState gs = newGameState(newPosition(rbRow, rbCol), newPosition(hmRow, hmCol));
     for (i = 0; i < (*gd).gdSize; i++) {
@@ -60,11 +60,11 @@ void addState2(GameDict * gd, Position rbP, Position hmP, int newVal) {
     }
 }
 
-int deleteState(GameDict * gd, unsigned int rbRow, unsigned int rbCol, unsigned int hmRow, unsigned int hmCol) {
+int deleteState(GameDict * gd, int rbRow, int rbCol, int hmRow, int hmCol) {
     // TODO implement deleteState
 }
 
-int getStateCost(GameDict gd, unsigned int rbRow, unsigned int rbCol, unsigned int hmRow, unsigned int hmCol) {
+int getStateCost(GameDict gd, int rbRow, int rbCol, int hmRow, int hmCol) {
     int i;
     GameState gs = newGameState(newPosition(rbRow, rbCol), newPosition(hmRow, hmCol));
     for (i = 0; i < gd.gdSize; i++) {

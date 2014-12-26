@@ -10,7 +10,7 @@ void initDict(Dict * d) {
     }
 }
 
-int hasKey(Dict d, unsigned int row, unsigned int col) {
+int hasKey(Dict d, int row, int col) {
     // implement initDict
     if (isValidPos(row, col) && d.d[row][col] != -1)
         return TRUE;
@@ -25,7 +25,7 @@ int hasKey2(Dict d, Position pos) {
         return FALSE;
 }
 
-void addKey(Dict * d, unsigned int row, unsigned int col, int newVal) {
+void addKey(Dict * d, int row, int col, int newVal) {
     // implement initDict
     if (isValidPos(row, col))
         (*d).d[row][col] = newVal;
@@ -36,8 +36,8 @@ void addKey2(Dict * d, Position pos, int newVal) {
         (*d).d[pos.row][pos.col] = newVal;
 }
 
-int deleteKey(Dict * d, unsigned int row, unsigned int col) {
-    if (row >= 0 && row < N_ROW && col >= 0 && col < N_COL) {
+int deleteKey(Dict * d, int row, int col) {
+    if (isValidPos(row, col)) {
         int val = (*d).d[row][col];
         (*d).d[row][col] = -1;
         return val;
@@ -45,7 +45,7 @@ int deleteKey(Dict * d, unsigned int row, unsigned int col) {
     return -1;
 }
 
-int getValue(Dict d, unsigned int row, unsigned int col) {
+int getValue(Dict d, int row, int col) {
     // implement initDict
     if (isValidPos(row, col))
         return d.d[row][col];

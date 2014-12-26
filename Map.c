@@ -46,7 +46,7 @@ void printMap(unsigned int map[N_ROW][N_COL][N_WALL]) {
     printf("\n");
 }
 
-int isNeighbour(unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2) {
+int isNeighbour(int row1, int col1, int row2, int col2) {
     if (isValidPos(row1, col1) && isValidPos(row2, col2)) {
         if (row1 == row2 && abs(col2 - col1) == 1)
             return TRUE;
@@ -67,7 +67,7 @@ int isNeighbour2(Position pos1, Position pos2) {
     return FALSE;
 }
 
-int setWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2) {
+int setWall(unsigned int map[N_ROW][N_COL][N_WALL], int row1, int col1, int row2, int col2) {
     if (isNeighbour(row1, col1, row2, col2)) {
         if (row1 == row2) {
             if (col1 > col2) {
@@ -123,7 +123,7 @@ int setWall2(unsigned int map[N_ROW][N_COL][N_WALL], Position pos1, Position pos
     return FALSE;
 }
 
-int checkWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2) {
+int checkWall(unsigned int map[N_ROW][N_COL][N_WALL], int row1, int col1, int row2, int col2) {
     if (isNeighbour(row1, col1, row2, col2)) {
         if (row1 == row2) {
             if (col1 > col2) {
@@ -148,7 +148,7 @@ int checkWall(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row1, unsigne
         }
         return FALSE;
     } else {
-        return FALSE;
+        return TRUE;
     }
 }
 
@@ -177,7 +177,7 @@ int checkWall2(unsigned int map[N_ROW][N_COL][N_WALL], Position pos1, Position p
         }
         return FALSE;
     } else {
-        return FALSE;
+        return TRUE;
     }
 }
 
@@ -319,7 +319,7 @@ int setWallRight(unsigned int map[N_ROW][N_COL][N_WALL], Position rbPos, unsigne
     return TRUE;
 }
 
-int hasCorner(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row, unsigned int col) {
+int hasCorner(unsigned int map[N_ROW][N_COL][N_WALL], int row, int col) {
     if (map[row][col][NORTH] == 1) {
         if (map[row][col][EAST] == 1 || map[row][col][WEST] == 1)
             return TRUE;
@@ -331,7 +331,7 @@ int hasCorner(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int row, unsigned
     return FALSE;
 }
 
-int isCornerPos(unsigned int corner[N_ROW][N_COL], unsigned int row, unsigned int col) {
+int isCornerPos(unsigned int corner[N_ROW][N_COL], int row, int col) {
     if (corner[row][col] == 1)
         return TRUE;
     else
@@ -357,7 +357,7 @@ void getCornersPos(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int corner[N
     }
 }
 
-int isMovable(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int startRow, unsigned int startCol, unsigned int endRow, unsigned int endCol) {
+int isMovable(unsigned int map[N_ROW][N_COL][N_WALL], int startRow, int startCol, int endRow, int endCol) {
     if (startRow == endRow) {
         if (startCol > endCol) {
             // check east wall

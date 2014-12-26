@@ -12,7 +12,7 @@ void initPosTrack(PosTrack * posTr) {
     }
 }
 
-void addTrack(PosTrack * posTr, unsigned int row, unsigned int col, unsigned int fromRow, unsigned int fromCol) {
+void addTrack(PosTrack * posTr, int row, int col, int fromRow, int fromCol) {
     (*posTr).pt[row][col][ROW_CODE] = fromRow;
     (*posTr).pt[row][col][COL_CODE] = fromCol;
 }

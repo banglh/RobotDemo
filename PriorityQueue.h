@@ -21,8 +21,8 @@ void enqueue(PriorityQueue * pqueue, QueueElement element);
 int isEmptyQueue(PriorityQueue pqueue);
 void printQueue(PriorityQueue pqueue);
 
-QueueElement newQueueElement(unsigned int row, unsigned int col, unsigned int priority);
+QueueElement newQueueElement(int row, int col, unsigned int priority);
 QueueElement newQueueElement2(Position pos, unsigned int priority);
-void setQueueElement(QueueElement *qe, unsigned int row, unsigned int col, unsigned int priority);
+void setQueueElement(QueueElement *qe, int row, int col, unsigned int priority);
 
 #endif // __PRIORITY_QUEUE_H

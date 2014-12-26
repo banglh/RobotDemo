@@ -10,12 +10,12 @@ typedef struct {
 } Dict;
 
 void initDict(Dict * d);
-int hasKey(Dict d, unsigned int row, unsigned int col);
+int hasKey(Dict d, int row, int col);
 int hasKey2(Dict d, Position pos);
-void addKey(Dict * d, unsigned int row, unsigned int col, int newVal);
+void addKey(Dict * d, int row, int col, int newVal);
 void addKey2(Dict * d, Position pos, int newVal);
-int deleteKey(Dict * d, unsigned int row, unsigned int col);
-int getValue(Dict d, unsigned int row, unsigned int col);
+int deleteKey(Dict * d, int row, int col);
+int getValue(Dict d, int row, int col);
 int getValue2(Dict d, Position pos);
 void printDict(Dict d);
 

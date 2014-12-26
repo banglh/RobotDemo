@@ -10,6 +10,9 @@
 #include "PriorityQueue.h"
 #include "Dictionary.h"
 #include "Path.h"
+#include "GameDict.h"
+#include "GameQueue.h"
+#include "GameTrack.h"
 
 // real map
 unsigned int rMap[N_ROW][N_COL][N_WALL];
@@ -288,170 +291,78 @@ int step() {
     return action;
 }
 
-// function to check if a position can be a subGoal or not
-int isSubGoal(unsigned int checkRow, unsigned int checkCol, unsigned int curGoalRow, unsigned int curGoalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
-    /* criteria
-    1. neighbor of current goal
-    2. Not the final goal
-    3. Not at the corner
-    4. There is no wall between the subGoal and the position A (subGoal is between A and the goal)
-    5. After robot move the person from subGoal to the current goal, it can continue with the prevGoal (no need to check when goal == prevGoal == final goal)
-    6. Assume subGoal == prevGoal, if robot still can move person from subGoal back to current goal after move it from current goal to subGoal  invalid subGoal
-    */
+int getTransitionCost(unsigned int map[N_ROW][N_COL][N_WALL], GameState startState, GameState endState) {
+    // get the position X to which robot has to reach in order to move human
+    unsigned int xRow = startState.hmPos.row + startState.hmPos.row - endState.hmPos.row;
+    unsigned int xCol = startState.hmPos.col + startState.hmPos.col - endState.hmPos.col;
 
-    // check if the candidate is the final goal
-    if (isSamePos(checkRow, checkCol, goalPos.row, goalPos.col))
-        return FALSE;
-
-    // check if there is wall between current goal and the candidate position
-    if (checkWall(map, checkRow, checkCol, curGoalRow, curGoalCol))
-        return FALSE;
-
-    // check if the candidate is a corner position
-    if (isCornerPos(visited, checkRow, checkCol))
-        return FALSE;
-
-    // check if robot can move person from the candidate position to the current goal
-    if (!isMovable(map, checkRow, checkCol, curGoalRow, curGoalCol))
-        return FALSE;
-
-    // check criterion 5
-    if (!isSamePos(goalPos.row, goalPos.col, prevGoalRow, prevGoalCol)) {
-        // check if there is a path from the candidate position to the position X from which robot move person from the current goal to the prevGoal
-        // given the human is at the current goal
-        unsigned int rowX = curGoalRow + curGoalRow - prevGoalRow;
-        unsigned int colX = curGoalCol + curGoalCol - prevGoalCol;
-        if (!hasPath(map, checkRow, checkCol, rowX, colX, curGoalRow, curGoalCol))
-            return FALSE;
-    }
-
-    // check criterion 6
-    if (isSamePos(checkRow, checkCol, prevGoalRow, prevGoalCol)) {
-        // check if there is a path from current goal to the position from which robot move person given person position is at subGoal
-        unsigned int xRow = checkRow + checkRow - curGoalRow;
-        unsigned int xCol = checkCol + checkCol - curGoalCol;
-        if (hasPath(map, curGoalRow, curGoalCol, xRow, xCol, checkRow, checkCol))
-            return FALSE;
-    }
-
-    // all the criteria is satisfied
-    return TRUE;
+    // check and get path cost from robot position in start state to position X
+    Position xPos = newPosition(xRow, xCol);
+    return getMoveCost2(map, startState.rbPos, xPos, startState.hmPos);
 }
 
-// function to get subGoal candidates
-void getCandidates(int candidates[4][MAP_DIMS], unsigned int curGoalRow, unsigned int curGoalCol, unsigned int prevGoalRow, unsigned int prevGoalCol) {
-    // get candidates
-    int j = 0;
-    int i;
-    for (i = -2; i < 3; i++) {
-        if (i != 0) {
-            candidates[j][ROW_CODE] = curGoalRow + i/2;
-            candidates[j][COL_CODE] = curGoalCol + i%2;
-            j++;
+int findSolutionAstar(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int corners[N_ROW][N_COL], GameTrack * gt, Position rbPos, Position hmPos, Position gPos) {
+    // initialize queue
+    GameQueue gq;
+    gameQueueInit(&gq);
+
+    // initialize cost dictionary
+    GameDict stateCost;
+    initGameDict(&stateCost);
+
+    // initialize game track
+    initGameTrack(gt);
+
+    // put the initial game state to queue
+    enGameQueue(&gq, newGameQueueElement2(rbPos, hmPos, 0));
+
+    // save cost of initial state to dictionary
+    addState2(&stateCost, rbPos, hmPos, 0);
+
+    while (!isEmptyGameQueue(gq)) {
+//        printGameQueue(gq);
+
+        // get state to consider from game queue
+        GameQueueElement curGameE = deGameQueue(&gq);
+        GameState curState = curGameE.gs;
+
+//        printGameState(curState);
+//        printf("\n");
+
+        // check if the human has been moved to the goal in this state
+        if (isSamePos2(curState.hmPos, gPos)) {
+            return TRUE;
         }
-    }
 
-    // sort candidates
-    int tmpRow, tmpCol, costi, costj;
-    int acrossRow = curGoalRow + curGoalRow - prevGoalRow;
-    int acrossCol = curGoalCol + curGoalCol - prevGoalCol;
-    for (i = 0; i < 3; i++) {
-        for (j = i+1; j < 4; j++) {
-            // get cost i
-            if (isValidPos(candidates[i][ROW_CODE], candidates[i][COL_CODE]))
-                costi = estimateCost(candidates[i][ROW_CODE], candidates[i][COL_CODE], humanPos.row, humanPos.col);
-            else
-                costi = MAX_VALUE;
+        // otherwise
+        int i, nextHmRow, nextHmCol, newcost;
+        unsigned int priority, transCost;
+        Position nextHmP;
+        // for each neighbor of considered state
+        for (i = -2; i < 3; i++) {
+            if (i != 0) {
+                nextHmRow = curState.hmPos.row + i/2;
+                nextHmCol = curState.hmPos.col + i%2;
 
-            // get cost j
-            if (isValidPos(candidates[j][ROW_CODE], candidates[j][COL_CODE]))
-                costj = estimateCost(candidates[j][ROW_CODE], candidates[j][COL_CODE], humanPos.row, humanPos.col);
-            else
-                costj = MAX_VALUE;
-
-            // exchange if costi > costj
-            if (costi > costj) {
-                tmpRow = candidates[i][ROW_CODE];
-                tmpCol = candidates[i][COL_CODE];
-                candidates[i][ROW_CODE] = candidates[j][ROW_CODE];
-                candidates[i][COL_CODE] = candidates[j][COL_CODE];
-                candidates[j][ROW_CODE] = tmpRow;
-                candidates[j][COL_CODE] = tmpCol;
-            }
-
-            if (costi == costj && costi != MAX_VALUE) {
-                if (candidates[j][ROW_CODE] == acrossRow && candidates[j][COL_CODE] == acrossCol) {
-                    tmpRow = candidates[i][ROW_CODE];
-                    tmpCol = candidates[i][COL_CODE];
-                    candidates[i][ROW_CODE] = candidates[j][ROW_CODE];
-                    candidates[i][COL_CODE] = candidates[j][COL_CODE];
-                    candidates[j][ROW_CODE] = tmpRow;
-                    candidates[j][COL_CODE] = tmpCol;
+                if (isValidPos(nextHmRow, nextHmCol)
+                     && !checkWall(map, nextHmRow, nextHmCol, curState.hmPos.row, curState.hmPos.col)
+                     && (!isCornerPos(corners, nextHmRow, nextHmCol) || isSamePos2(gPos, newPosition(nextHmRow, nextHmCol)))
+                     && isMovable(map, curState.hmPos.row, curState.hmPos.col, nextHmRow, nextHmCol)) {
+                        GameState state = newGameState(curState.hmPos, newPosition(nextHmRow, nextHmCol));
+                        transCost = getTransitionCost(map, curState, state);
+                        if (transCost != MAX_VALUE) {
+                            newcost = getStateCost2(stateCost, curState.rbPos, curState.hmPos) + transCost;
+                            if (newcost < getStateCost2(stateCost, state.rbPos, state.hmPos)) {
+                                addState2(&stateCost, state.rbPos, state.hmPos, newcost);
+                                priority = newcost + estimateCost2(state.hmPos, gPos);
+                                enGameQueue(&gq, newGameQueueElement2(state.rbPos, state.hmPos, priority));
+                                addStateTrack2(gt, state, curState);
+                            }
+                        }
                 }
             }
         }
     }
-}
-
-// implement the function to find a solution for rescuing the person
-int findSolution(unsigned int goalRow, unsigned int goalCol, unsigned int prevGoalRow, unsigned int prevGoalCol, int depth) {
-    // limit the depth of tree search
-    if (depth == MAX_DEPTH)
-        return FALSE;
-
-    int candidates[4][MAP_DIMS];
-
-    // get candidates
-    getCandidates(candidates, goalRow, goalCol, prevGoalRow, prevGoalCol);
-
-    /*******
-    printf("current goal: (%d, %d), prevGoal: (%d, %d)\n", goalRow, goalCol, prevGoalRow, prevGoalCol);
-    int i;
-    for (i = 0; i < 4; i++) {
-        printf("candidate %d: (%d, %d), ", i, candidates[i][ROW_CODE], candidates[i][COL_CODE]);
-    }
-    printf("\ndepth = %d", depth);
-    printf("\n\n");
-//    getchar();
-    /*******/
-
-    // for each candidate
-    int c, cRow, cCol;
-    for (c = 0; c < 4; c++) {
-        cRow = candidates[c][ROW_CODE];
-        cCol = candidates[c][COL_CODE];
-        if (isValidPos(cRow, cCol)) {
-            if (isSubGoal(cRow, cCol, goalRow, goalCol, prevGoalRow, prevGoalCol)) {
-                // push subGoal to stack
-                push(&posStack, newPosition(cRow, cCol));
-
-                // check element problem (when the subGoal is the initial human position)
-                if (isSamePos(cRow, cCol, humanPos.row, humanPos.col)) {
-                    int rowX = cRow + cRow - goalRow;
-                    int colX = cCol + cCol - goalCol;
-                    if (hasPath(map, startPos.row, startPos.col, rowX, colX, cRow, cCol)) {
-                        // there is a solution
-                        return TRUE;
-                    } else {
-                        // solution invalid
-                        pop(&posStack);
-                        return FALSE;
-                    }
-                }
-
-                // otherwise, solve a sub problem with the subGoal as the goal and the current goal as the prevGoal
-                int hasSolution = findSolution(cRow, cCol, goalRow, goalCol, depth + 1);
-
-                if (hasSolution)
-                    return TRUE;
-                else {
-                    pop(&posStack);
-                    continue;
-                }
-            }
-        }
-    }
-
     return FALSE;
 }
 
@@ -477,7 +388,7 @@ int main()
     setDirection(&robotDir, NORTH);
 
     // set human position
-    setPos(&humanPos, 2,2);
+    setPos(&humanPos, 2,4);
     setVisited2(visited, humanPos);
 
     // set goal position
@@ -523,37 +434,27 @@ int main()
     // mark the corner positions in the visited array
     getCornersPos(map, visited);
 
-    // reset stacks to reuse them as the solution stacks
-    resetStack(&posStack);
-
     // call function to find the path to move the person to the final goal
     int hasSolution;
+    GameTrack gt;
+    initGameTrack(&gt);
     if (!isCornerPos2(visited, humanPos)
         && hasPath2(map, humanPos, goalPos, newPosition(N_ROW, N_COL))
         && hasPath2(map, humanPos, startPos, newPosition(N_ROW, N_COL))) {
-            hasSolution = findSolution(goalPos.row, goalPos.col, goalPos.row, goalPos.col, 0);
+            hasSolution = findSolutionAstar(map, visited, &gt, startPos, humanPos, goalPos);
     } else {
         hasSolution = FALSE;
     }
 
     if (hasSolution) {
         printf("Found a solution\n");
-        printStack(posStack);
+        printGameTrack(gt);
     } else {
         printf("There is no solution\n");
+        printGameTrack(gt);
     }
+
     /*********************************************************/
-
-    PosTrack posTr;
-    initPosTrack(&posTr);
-
-    Position p1 = newPosition(3,0);
-    Position p2 = newPosition(3,5);
-
-    int a = findPath2(map, &posTr, p1, p2, newPosition(2,2));
-
-    printf("\na = %d\n", a);
-    printPosTrack(posTr);
 
     return 0;
 }

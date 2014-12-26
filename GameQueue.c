@@ -53,7 +53,7 @@ void printGameQueue(GameQueue gqueue) {
     printf("\n");
 }
 
-GameQueueElement newGameQueueElement(unsigned int rbRow, unsigned int rbCol, unsigned int hmRow, unsigned int hmCol, unsigned int priority) {
+GameQueueElement newGameQueueElement(int rbRow, int rbCol, int hmRow, int hmCol, unsigned int priority) {
     GameQueueElement e;
     e.gs.rbPos.row = rbRow;
     e.gs.rbPos.col = rbCol;
@@ -71,7 +71,7 @@ GameQueueElement newGameQueueElement2(Position rbP, Position hmP, unsigned int p
     return e;
 }
 
-void setGameQueueElement(GameQueueElement *qe, unsigned int rbRow, unsigned int rbCol, unsigned int hmRow, unsigned int hmCol, unsigned int priority) {
+void setGameQueueElement(GameQueueElement *qe, int rbRow, int rbCol, int hmRow, int hmCol, unsigned int priority) {
     (*qe).gs.rbPos.row = rbRow;
     (*qe).gs.rbPos.col = rbCol;
     (*qe).gs.hmPos.row = hmRow;

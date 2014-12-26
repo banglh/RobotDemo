@@ -6,20 +6,20 @@
 #include "Constants.h"
 
 typedef struct {
-    unsigned int row;
-    unsigned int col;
+    int row;
+    int col;
 } Position;
 
-Position newPosition(unsigned int row, unsigned int col);
-int isValidPos(unsigned int row, unsigned int col);
+Position newPosition(int row, int col);
+int isValidPos(int row, int col);
 int isValidPos2(Position pos);
-int isSamePos(unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2);
+int isSamePos(int row1, int col1, int row2, int col2);
 int isSamePos2(Position pos1, Position pos2);
-unsigned int getRow(Position pos);
-unsigned int getCol(Position pos);
-int setRow(Position * pos, unsigned int newRow);
-int setCol(Position * pos, unsigned int newCol);
-int setPos(Position * pos, unsigned int newRow, unsigned int newCol);
+int getRow(Position pos);
+int getCol(Position pos);
+int setRow(Position * pos, int newRow);
+int setCol(Position * pos, int newCol);
+int setPos(Position * pos, int newRow, int newCol);
 void printPos(Position pos);
 
 #endif // __POSITION_H

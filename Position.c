@@ -1,13 +1,13 @@
 #include "Position.h"
 
-Position newPosition(unsigned int row, unsigned int col) {
+Position newPosition(int row, int col) {
     Position pos;
     pos.row = row;
     pos.col = col;
     return pos;
 }
 
-int isValidPos(unsigned int row, unsigned int col) {
+int isValidPos(int row, int col) {
     if (row < 0 || row >= N_ROW || col < 0 || col >= N_COL)
         return FALSE;
     return TRUE;
@@ -19,7 +19,7 @@ int isValidPos2(Position pos) {
     return TRUE;
 }
 
-int isSamePos(unsigned int row1, unsigned int col1, unsigned int row2, unsigned int col2) {
+int isSamePos(int row1, int col1, int row2, int col2) {
     if (row1 != row2 || col1 != col2)
         return FALSE;
     return TRUE;
@@ -32,15 +32,15 @@ int isSamePos2(Position pos1, Position pos2) {
         return TRUE;
 }
 
-unsigned int getRow(Position pos) {
+int getRow(Position pos) {
     return pos.row;
 }
 
-unsigned int getCol(Position pos) {
+int getCol(Position pos) {
     return pos.col;
 }
 
-int setRow(Position * pos, unsigned int newRow) {
+int setRow(Position * pos, int newRow) {
     if (newRow < 0 || newRow >= N_ROW)
         return FALSE;
 
@@ -48,7 +48,7 @@ int setRow(Position * pos, unsigned int newRow) {
     return TRUE;
 }
 
-int setCol(Position * pos, unsigned int newCol) {
+int setCol(Position * pos, int newCol) {
     if (newCol < 0 || newCol >= N_COL)
         return FALSE;
 
@@ -56,13 +56,7 @@ int setCol(Position * pos, unsigned int newCol) {
     return TRUE;
 }
 
-int setPos(Position * pos, unsigned int newRow, unsigned int newCol) {
-    if (newRow < 0 || newRow >= N_ROW)
-        return FALSE;
-
-    if (newCol < 0 || newCol >= N_COL)
-        return FALSE;
-
+int setPos(Position * pos, int newRow, int newCol) {
     (*pos).row = newRow;
     (*pos).col = newCol;
 

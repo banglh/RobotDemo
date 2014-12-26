@@ -8,9 +8,15 @@ void initGameTrack(GameTrack * gameTr) {
 void addStateTrack2(GameTrack * gameTr, GameState gs, GameState frgs) {
     int i;
     for (i = 0; i < (*gameTr).gtSize; i++) {
-        if (isSameGameState((*gameTr).gsL[i], gs))
+        if (isSameGameState((*gameTr).gsL[i], gs)) {
             (*gameTr).fromL[i] = frgs;
+            return;
+        }
     }
+    // add new entry
+    (*gameTr).gsL[(*gameTr).gtSize] = gs;
+    (*gameTr).fromL[(*gameTr).gtSize] = frgs;
+    (*gameTr).gtSize++;
 }
 
 void printGameTrack(GameTrack gameTr) {

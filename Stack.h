@@ -18,6 +18,6 @@ Position head(Stack st);
 int isEmptyStack(Stack st);
 void printStack(Stack st);
 void resetStack(Stack *st);
-int isInStack(Stack st, unsigned int row, unsigned int col);
+int isInStack(Stack st, int row, int col);
 int isInStack2(Stack st, Position pos);
 #endif
