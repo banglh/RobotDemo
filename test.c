@@ -301,7 +301,7 @@ int getTransitionCost(unsigned int map[N_ROW][N_COL][N_WALL], GameState startSta
     Position xPos = newPosition(xRow, xCol);
     int cost = getMoveCost2(map, startState.rbPos, xPos, startState.hmPos);
 
-    /** plan A: not consider the path robot has to move **
+    /** plan A: not consider the path robot has to move **/
     // TODO bug: cannot find solution in some case, e.g rbPos = (3,0), hmPos = (1,4), goalPos = (3,0), no wall
     if (cost != MAX_VALUE) {
         return 1;
@@ -309,7 +309,7 @@ int getTransitionCost(unsigned int map[N_ROW][N_COL][N_WALL], GameState startSta
     else
         return MAX_VALUE;
     /**/
-    /** plan B: consider the path robot has to move **/
+    /** plan B: consider the path robot has to move **
     return cost;
     /**/
 }
