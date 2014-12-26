@@ -301,15 +301,17 @@ int getTransitionCost(unsigned int map[N_ROW][N_COL][N_WALL], GameState startSta
     Position xPos = newPosition(xRow, xCol);
     int cost = getMoveCost2(map, startState.rbPos, xPos, startState.hmPos);
 
+    /** plan A: not consider the path robot has to move **
+    // TODO bug: cannot find solution in some case, e.g rbPos = (3,0), hmPos = (1,4), goalPos = (3,0), no wall
     if (cost != MAX_VALUE) {
-        // plan A: not consider the path robot has to move
         return 1;
-
-        // plan B: consider the path robot has to move
-//        return cost;
     }
     else
         return MAX_VALUE;
+    /**/
+    /** plan B: consider the path robot has to move **/
+    return cost;
+    /**/
 }
 
 int findSolutionAstar(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int corners[N_ROW][N_COL], GameTrack * gt, Position rbPos, Position hmPos, Position gPos) {
@@ -342,6 +344,7 @@ int findSolutionAstar(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int corne
 
         // check if the human has been moved to the goal in this state
         if (isSamePos2(curState.hmPos, gPos)) {
+//            printGameDict(stateCost);
             return TRUE;
         }
 
@@ -374,6 +377,7 @@ int findSolutionAstar(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int corne
             }
         }
     }
+//    printGameDict(stateCost);
     return FALSE;
 }
 
@@ -399,7 +403,7 @@ int main()
     setDirection(&robotDir, NORTH);
 
     // set human position
-    setPos(&humanPos, 2,2);
+    setPos(&humanPos, 1,4);
     setVisited2(visited, humanPos);
 
     // set goal position
@@ -464,9 +468,9 @@ int main()
         printRescueSolution(solution);
     } else {
         printf("There is no solution\n");
-        printGameTrack(gt);
     }
 
+//    printGameTrack(gt);
     /*********************************************************/
 
     return 0;

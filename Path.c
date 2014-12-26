@@ -11,7 +11,7 @@ unsigned int estimateCost2(Position startPos, Position endPos) {
 }
 
 int findPath(unsigned int map[N_ROW][N_COL][N_WALL], PosTrack * posTr, int startRow, int startCol, int endRow, int endCol, int humanRow, int humanCol) {
-    // TODO implement findPath
+    // implement findPath
     PriorityQueue exploreQueue;
     Dict costDict;
 
