@@ -292,13 +292,24 @@ int step() {
 }
 
 int getTransitionCost(unsigned int map[N_ROW][N_COL][N_WALL], GameState startState, GameState endState) {
+
     // get the position X to which robot has to reach in order to move human
     unsigned int xRow = startState.hmPos.row + startState.hmPos.row - endState.hmPos.row;
     unsigned int xCol = startState.hmPos.col + startState.hmPos.col - endState.hmPos.col;
 
     // check and get path cost from robot position in start state to position X
     Position xPos = newPosition(xRow, xCol);
-    return getMoveCost2(map, startState.rbPos, xPos, startState.hmPos);
+    int cost = getMoveCost2(map, startState.rbPos, xPos, startState.hmPos);
+
+    if (cost != MAX_VALUE) {
+        // plan A: not consider the path robot has to move
+        return 1;
+
+        // plan B: consider the path robot has to move
+//        return cost;
+    }
+    else
+        return MAX_VALUE;
 }
 
 int findSolutionAstar(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int corners[N_ROW][N_COL], GameTrack * gt, Position rbPos, Position hmPos, Position gPos) {
@@ -388,7 +399,7 @@ int main()
     setDirection(&robotDir, NORTH);
 
     // set human position
-    setPos(&humanPos, 2,4);
+    setPos(&humanPos, 2,2);
     setVisited2(visited, humanPos);
 
     // set goal position
@@ -436,6 +447,7 @@ int main()
 
     // call function to find the path to move the person to the final goal
     int hasSolution;
+    RescueSolution solution;
     GameTrack gt;
     initGameTrack(&gt);
     if (!isCornerPos2(visited, humanPos)
@@ -448,7 +460,8 @@ int main()
 
     if (hasSolution) {
         printf("Found a solution\n");
-        printGameTrack(gt);
+        getRescueSolution(gt, startPos, humanPos, goalPos, &solution);
+        printRescueSolution(solution);
     } else {
         printf("There is no solution\n");
         printGameTrack(gt);
