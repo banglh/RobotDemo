@@ -24,6 +24,8 @@ GameState getFromState(GameTrack gameTr, GameState gs);
 
 void initSolution(RescueSolution * solution);
 void getRescueSolution(GameTrack gt, Position rbPos, Position hmPos, Position finalGoal, RescueSolution * solution);
+Position popSolution(RescueSolution * solution);
+int isEmptySolution(RescueSolution solution);
 void printRescueSolution(RescueSolution rs);
 
 #endif // __GAME_TRACK_H

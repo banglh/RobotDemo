@@ -44,7 +44,7 @@ int setRow(Position * pos, int newRow) {
     if (newRow < 0 || newRow >= N_ROW)
         return FALSE;
 
-    (*pos).row = newRow;
+    pos->row = newRow;
     return TRUE;
 }
 
@@ -52,13 +52,13 @@ int setCol(Position * pos, int newCol) {
     if (newCol < 0 || newCol >= N_COL)
         return FALSE;
 
-    (*pos).col = newCol;
+    pos->col = newCol;
     return TRUE;
 }
 
 int setPos(Position * pos, int newRow, int newCol) {
-    (*pos).row = newRow;
-    (*pos).col = newCol;
+    pos->row = newRow;
+    pos->col = newCol;
 
     return TRUE;
 }

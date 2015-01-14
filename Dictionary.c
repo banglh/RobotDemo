@@ -5,7 +5,7 @@ void initDict(Dict * d) {
     int i,j;
     for (i = 0; i < N_ROW; i++) {
         for (j = 0; j < N_COL; j++) {
-            (*d).d[i][j] = -1;
+            d->d[i][j] = -1;
         }
     }
 }
@@ -28,18 +28,18 @@ int hasKey2(Dict d, Position pos) {
 void addKey(Dict * d, int row, int col, int newVal) {
     // implement initDict
     if (isValidPos(row, col))
-        (*d).d[row][col] = newVal;
+        d->d[row][col] = newVal;
 }
 
 void addKey2(Dict * d, Position pos, int newVal) {
     if (isValidPos2(pos))
-        (*d).d[pos.row][pos.col] = newVal;
+        d->d[pos.row][pos.col] = newVal;
 }
 
 int deleteKey(Dict * d, int row, int col) {
     if (isValidPos(row, col)) {
-        int val = (*d).d[row][col];
-        (*d).d[row][col] = -1;
+        int val = d->d[row][col];
+        d->d[row][col] = -1;
         return val;
     }
     return -1;

@@ -1,22 +1,22 @@
 #include "GameTrack.h"
 
 void initGameTrack(GameTrack * gameTr) {
-    (*gameTr).gtSize = 0;
+    gameTr->gtSize = 0;
 }
 
 //void addStateTrack(GameTrack * gameTr, unsigned int row, unsigned int col, unsigned int fromRow, unsigned int fromCol);
 void addStateTrack2(GameTrack * gameTr, GameState gs, GameState frgs) {
     int i;
-    for (i = 0; i < (*gameTr).gtSize; i++) {
-        if (isSameGameState((*gameTr).gsL[i], gs)) {
-            (*gameTr).fromL[i] = frgs;
+    for (i = 0; i < gameTr->gtSize; i++) {
+        if (isSameGameState(gameTr->gsL[i], gs)) {
+            gameTr->fromL[i] = frgs;
             return;
         }
     }
     // add new entry
-    (*gameTr).gsL[(*gameTr).gtSize] = gs;
-    (*gameTr).fromL[(*gameTr).gtSize] = frgs;
-    (*gameTr).gtSize++;
+    gameTr->gsL[gameTr->gtSize] = gs;
+    gameTr->fromL[gameTr->gtSize] = frgs;
+    gameTr->gtSize++;
 }
 
 void printGameTrack(GameTrack gameTr) {
@@ -42,11 +42,11 @@ GameState getFromState(GameTrack gameTr, GameState gs) {
 }
 
 void initSolution(RescueSolution * solution) {
-    (*solution).top = -1;
+    solution->top = -1;
 }
 
 void getRescueSolution(GameTrack gt, Position rbPos, Position hmPos, Position finalGoal, RescueSolution * solution) {
-    (*solution).top = -1;
+    solution->top = -1;
     GameState startState = newGameState(rbPos, hmPos);
     GameState curState;
     int i;
@@ -58,13 +58,27 @@ void getRescueSolution(GameTrack gt, Position rbPos, Position hmPos, Position fi
     }
 
     while (!isSameGameState(curState, startState)) {
-        (*solution).top++;
-        (*solution).rs[(*solution).top] = curState.hmPos;
+        solution->top++;
+        solution->rs[solution->top] = curState.hmPos;
         curState = getFromState(gt, curState);
     }
 
-    (*solution).top++;
-    (*solution).rs[(*solution).top] = curState.hmPos;
+    solution->top++;
+    solution->rs[solution->top] = curState.hmPos;
+}
+
+Position popSolution(RescueSolution * solution) {
+    Position item;
+    item = solution->rs[solution->top];
+    solution->top--;
+    return item;
+}
+
+int isEmptySolution(RescueSolution solution) {
+    if (solution.top == -1)
+        return TRUE;
+    else
+        return FALSE;
 }
 
 void printRescueSolution(RescueSolution rs) {

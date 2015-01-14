@@ -1,7 +1,7 @@
 #include "GameQueue.h"
 
 void gameQueueInit(GameQueue * gqueue) {
-    (*gqueue).qsize = 0;
+    gqueue->qsize = 0;
 }
 
 GameQueueElement deGameQueue(GameQueue * gqueue) {
@@ -14,26 +14,26 @@ GameQueueElement deGameQueue(GameQueue * gqueue) {
     int minIndex = -1;
     int minPriority = MAX_VALUE;
     int i;
-    for (i = 0; i < (*gqueue).qsize; i++) {
-        if (((*gqueue).q[i]).priority < minPriority) {
+    for (i = 0; i < gqueue->qsize; i++) {
+        if ((gqueue->q[i]).priority < minPriority) {
             minIndex = i;
-            minPriority = ((*gqueue).q[i]).priority;
+            minPriority = (gqueue->q[i]).priority;
         }
     }
 
     // get the element to dequeue
-    GameQueueElement e = (*gqueue).q[minIndex];
+    GameQueueElement e = gqueue->q[minIndex];
 
     // update queue
-    (*gqueue).q[minIndex] = (*gqueue).q[(*gqueue).qsize - 1];
-    (*gqueue).qsize--;
+    gqueue->q[minIndex] = gqueue->q[gqueue->qsize - 1];
+    gqueue->qsize--;
 
     return e;
 }
 
 void enGameQueue(GameQueue * gqueue, GameQueueElement element) {
-    (*gqueue).q[(*gqueue).qsize] = element;
-    (*gqueue).qsize++;
+    gqueue->q[gqueue->qsize] = element;
+    gqueue->qsize++;
 }
 
 int isEmptyGameQueue(GameQueue gqueue) {

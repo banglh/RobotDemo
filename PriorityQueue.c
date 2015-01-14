@@ -2,7 +2,7 @@
 
 void queueInit(PriorityQueue * pqueue) {
     // queueInit
-    (*pqueue).qsize = 0;
+    pqueue->qsize = 0;
 }
 
 QueueElement dequeue(PriorityQueue * pqueue) {
@@ -17,27 +17,27 @@ QueueElement dequeue(PriorityQueue * pqueue) {
     int minIndex = -1;
     int minPriority = 1000;
     int i;
-    for (i = 0; i < (*pqueue).qsize; i++) {
-        if (((*pqueue).q[i]).priority < minPriority) {
+    for (i = 0; i < pqueue->qsize; i++) {
+        if ((pqueue->q[i]).priority < minPriority) {
             minIndex = i;
-            minPriority = ((*pqueue).q[i]).priority;
+            minPriority = (pqueue->q[i]).priority;
         }
     }
 
     // get the element to dequeue
-    QueueElement e = (*pqueue).q[minIndex];
+    QueueElement e = pqueue->q[minIndex];
 
     // update queue
-    (*pqueue).q[minIndex] = (*pqueue).q[(*pqueue).qsize - 1];
-    (*pqueue).qsize--;
+    pqueue->q[minIndex] = pqueue->q[pqueue->qsize - 1];
+    pqueue->qsize--;
 
     return e;
 }
 
 void enqueue(PriorityQueue * pqueue, QueueElement element) {
     // enqueue
-    (*pqueue).q[(*pqueue).qsize] = element;
-    (*pqueue).qsize++;
+    pqueue->q[pqueue->qsize] = element;
+    pqueue->qsize++;
 }
 
 int isEmptyQueue(PriorityQueue pqueue) {

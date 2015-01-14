@@ -8,8 +8,8 @@ GameState newGameState(Position rbP, Position hmP) {
 }
 
 void setGameState(GameState * gs, Position rbP, Position hmP) {
-    (*gs).rbPos = rbP;
-    (*gs).hmPos = hmP;
+    gs->rbPos = rbP;
+    gs->hmPos = hmP;
 }
 
 int isSameGameState(GameState gs1, GameState gs2) {

@@ -301,7 +301,7 @@ int getTransitionCost(unsigned int map[N_ROW][N_COL][N_WALL], GameState startSta
     Position xPos = newPosition(xRow, xCol);
     int cost = getMoveCost2(map, startState.rbPos, xPos, startState.hmPos);
 
-    /** plan A: not consider the path robot has to move **/
+    /** plan A: not consider the path robot has to move **
     // TODO bug: cannot find solution in some case, e.g rbPos = (3,0), hmPos = (1,4), goalPos = (3,0), no wall
     if (cost != MAX_VALUE) {
         return 1;
@@ -309,7 +309,7 @@ int getTransitionCost(unsigned int map[N_ROW][N_COL][N_WALL], GameState startSta
     else
         return MAX_VALUE;
     /**/
-    /** plan B: consider the path robot has to move **
+    /** plan B: consider the path robot has to move **/
     return cost;
     /**/
 }
@@ -381,6 +381,13 @@ int findSolutionAstar(unsigned int map[N_ROW][N_COL][N_WALL], unsigned int corne
     return FALSE;
 }
 
+/* for phase 2 */
+Position pushTarget;
+Position moveGoal;
+PosTrack pathTrack;
+Stack path;
+int action;
+
 int main()
 {
     /******************* DEMO ***************************/
@@ -414,7 +421,7 @@ int main()
     push(&posStack, robotPos);
 
     // run
-    int action;
+
     printf("%-5s | %-10s | %-10s | %-s\n", "Step", "Position", "Direction", "Action");
     while (TRUE) {
         stepN++;
@@ -466,11 +473,69 @@ int main()
         printf("Found a solution\n");
         getRescueSolution(gt, startPos, humanPos, goalPos, &solution);
         printRescueSolution(solution);
+
+        popSolution(&solution);
+        printf("%-5s | %-10s | %-10s | %-s\n", "Step", "Position", "Direction", "Action");
+        while (TRUE) {
+            if (!isEmptySolution(solution)) {
+                /* get current target to push human */
+                pushTarget = popSolution(&solution);
+
+                /* get the current goal to move to */
+                moveGoal.row = 2 * humanPos.row - pushTarget.row;
+                moveGoal.col = 2 * humanPos.col - pushTarget.col;
+
+                /* find path from current robot position to the current goal */
+                findPath2(map, &pathTrack, robotPos, moveGoal, humanPos);
+                getPath(pathTrack, robotPos, moveGoal, &path);
+
+                /* go to current goal */
+                while (!isEmptyStack(path)) {
+                    /* get next position */
+                    nextPos = pop(&path);
+
+                    /* decide action */
+                    action = getAction(robotPos, nextPos, robotDir);
+
+                    printf("%-5d | (%-d, %-d) | ", stepN, robotPos.row, robotPos.col);
+                    printDirection(robotDir);
+                    printf(" | ");
+                    printAction(action);
+                    printf("\n");
+
+                    /* take action */
+                    if (isValidPos2(nextPos)) {
+                        move(&robotPos, &nextPos, &robotDir);
+                    }
+                    else
+                        break;
+
+                    /* TODO take real action */
+                }
+
+                /* push human to the target */
+                action = getAction(robotPos, humanPos, robotDir);
+
+                printf("%-5d | (%-d, %-d) | ", stepN, robotPos.row, robotPos.col);
+                printDirection(robotDir);
+                printf(" | ");
+                printAction(action);    printf(" + push");
+                printf("\n");
+
+                /* take action */
+                move(&robotPos, &humanPos, &robotDir);
+
+                /* update human position */
+                humanPos = pushTarget;
+
+                /* TODO take real action */
+            } else {
+                break;
+            }
+        }
     } else {
         printf("There is no solution\n");
     }
-
-//    printGameTrack(gt);
     /*********************************************************/
 
     return 0;

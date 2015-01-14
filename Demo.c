@@ -1,14 +1,14 @@
 #include "Demo.h"
 
 void buildRealMap(unsigned int rmap[N_ROW][N_COL][N_WALL]) {
-//    setWall(rmap, 1,0,1,1);
-//    setWall(rmap, 2,1,3,1);
-//    setWall(rmap, 0,2,0,3);
-//    setWall(rmap, 2,2,2,3);
-//    setWall(rmap, 3,2,3,3);
-//    setWall(rmap, 1,3,2,3);
-//    setWall(rmap, 0,4,0,5);
-//    setWall(rmap, 0,5,1,5);
+    setWall(rmap, 1,0,1,1);
+    setWall(rmap, 2,1,3,1);
+    setWall(rmap, 0,2,0,3);
+    setWall(rmap, 2,2,2,3);
+    setWall(rmap, 3,2,3,3);
+    setWall(rmap, 1,3,2,3);
+    setWall(rmap, 0,4,0,5);
+    setWall(rmap, 0,5,1,5);
 }
 
 void getSensors(unsigned int sensors[N_SENSORS], unsigned int map[N_ROW][N_COL][N_WALL], Position rbPos, unsigned int rbDir) {

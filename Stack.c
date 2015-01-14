@@ -1,32 +1,32 @@
 #include "Stack.h"
 
 void stackInit(Stack * st) {
-    (*st).top = -1;
+    st->top = -1;
 }
 
 void push(Stack * st, Position item) {
-    (*st).top++;
-    (*st).s[(*st).top] = item;
+    st->top++;
+    st->s[st->top] = item;
 }
 
 Position pop(Stack * st) {
     Position item;
-    item = (*st).s[(*st).top];
-    (*st).top--;
+    item = st->s[st->top];
+    st->top--;
     return item;
 }
 
 Position popToIndex(Stack * st, int index) {
     // popToIndex
     Position item;
-    if (index >= (*st).top) {
-        item = (*st).s[(*st).top];
+    if (index >= st->top) {
+        item = st->s[st->top];
     } else if (index > -1) {
-        item = (*st).s[index + 1];
-        (*st).top = index;
+        item = st->s[index + 1];
+        st->top = index;
     } else {
-        item = (*st).s[0];
-        (*st).top = -1;
+        item = st->s[0];
+        st->top = -1;
     }
     return item;
 }
@@ -59,7 +59,7 @@ void printStack(Stack st) {
 }
 
 void resetStack(Stack *st) {
-    (*st).top = -1;
+    st->top = -1;
 }
 
 int isInStack(Stack st, int row, int col) {
